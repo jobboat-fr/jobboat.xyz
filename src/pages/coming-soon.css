@@ -1,0 +1,484 @@
+/* ============================================
+   COMING SOON -- Ocean + Boat Landing
+   Monochrome. Cinematic. Retention-first.
+   ============================================ */
+
+.cs {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #030711 0%,
+    #050a18 30%,
+    #0b1220 55%,
+    #111827 75%,
+    #1e293b 100%
+  );
+}
+
+/* ── Stars ── */
+.cs-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cs-star {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(226, 232, 240, 0.7);
+  animation: cs-twinkle ease-in-out infinite alternate;
+}
+
+@keyframes cs-twinkle {
+  0% { opacity: 0.2; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ── Moon ── */
+.cs-moon {
+  position: absolute;
+  top: 8%;
+  right: 15%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #e2e8f0, #94a3b8 60%, #64748b);
+  box-shadow:
+    0 0 40px rgba(226, 232, 240, 0.15),
+    0 0 80px rgba(226, 232, 240, 0.05);
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* ── Nav ── */
+.cs-nav {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 1.25rem 2rem;
+}
+
+.cs-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cs-nav__name {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--jb-text-primary, #f1f5f9);
+}
+
+/* ── Content ── */
+.cs-content {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem 10rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Badge */
+.cs-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(148, 163, 184, 0.06);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+/* Title */
+.cs-title {
+  font-size: clamp(2rem, 6vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: #f1f5f9;
+  margin-bottom: 1.25rem;
+}
+
+/* Subtitle */
+.cs-subtitle {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  color: #94a3b8;
+  line-height: 1.7;
+  max-width: 540px;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Timer ── */
+.cs-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.cs-timer__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cs-timer__digits {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  min-width: 70px;
+  backdrop-filter: blur(10px);
+}
+
+.cs-timer__number {
+  font-family: var(--jb-font-display, 'Space Grotesk', monospace);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+  display: block;
+  line-height: 1;
+}
+
+.cs-timer__label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.cs-timer__sep {
+  font-family: var(--jb-font-display, monospace);
+  font-size: 2rem;
+  font-weight: 300;
+  color: #334155;
+  margin-bottom: 1.2rem;
+}
+
+/* ── Email capture ── */
+.cs-email-wrap {
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+.cs-email-cta {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.cs-email {
+  display: flex;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s ease;
+}
+
+.cs-email:focus-within {
+  border-color: rgba(226, 232, 240, 0.3);
+}
+
+.cs-email__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  color: #f1f5f9;
+  font-family: inherit;
+}
+
+.cs-email__input::placeholder {
+  color: #475569;
+}
+
+.cs-email__btn {
+  background: linear-gradient(135deg, #1a3a5c 0%, #1e4a72 100%);
+  color: #e8edf3;
+  border: none;
+  padding: 0.8rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 12px rgba(30, 74, 114, 0.15);
+}
+
+.cs-email__btn:hover {
+  background: linear-gradient(135deg, #1e4a72 0%, #2d6aa0 100%);
+  box-shadow: 0 0 20px rgba(30, 90, 150, 0.3);
+}
+
+.cs-email__success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+}
+
+/* ── Impact pills ── */
+.cs-impact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.cs-impact__pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  font-size: 0.75rem;
+  color: #94a3b8;
+  backdrop-filter: blur(8px);
+}
+
+.cs-impact__pill strong {
+  color: #e2e8f0;
+  font-weight: 700;
+}
+
+/* ── Manifesto ── */
+.cs-manifesto {
+  max-width: 520px;
+  margin-bottom: 2rem;
+}
+
+.cs-manifesto p {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* ── Ocean scene ── */
+.cs-ocean {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35vh;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Boat */
+.cs-boat {
+  position: absolute;
+  bottom: 45%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  animation: cs-boat-bob 4s ease-in-out infinite;
+}
+
+.cs-boat__svg {
+  width: clamp(80px, 15vw, 140px);
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+}
+
+@keyframes cs-boat-bob {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) rotate(-1.5deg);
+  }
+  25% {
+    transform: translateX(-50%) translateY(-6px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(-50%) translateY(2px) rotate(1.5deg);
+  }
+  75% {
+    transform: translateX(-50%) translateY(-4px) rotate(-0.5deg);
+  }
+}
+
+/* Moon reflection */
+.cs-ocean__reflection {
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 3px;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(226, 232, 240, 0.12),
+    rgba(226, 232, 240, 0.04),
+    transparent
+  );
+  filter: blur(2px);
+  animation: cs-reflect-shimmer 3s ease-in-out infinite alternate;
+}
+
+@keyframes cs-reflect-shimmer {
+  0% { opacity: 0.6; transform: scaleX(1); }
+  100% { opacity: 1; transform: scaleX(2.5); }
+}
+
+/* Waves */
+.cs-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100px;
+  z-index: 3;
+}
+
+.cs-wave--1 {
+  z-index: 3;
+  opacity: 0.5;
+  animation: cs-wave-drift 12s linear infinite;
+  bottom: 20px;
+}
+
+.cs-wave--2 {
+  z-index: 4;
+  opacity: 0.6;
+  animation: cs-wave-drift 8s linear infinite reverse;
+  bottom: 8px;
+}
+
+.cs-wave--3 {
+  z-index: 5;
+  opacity: 0.8;
+  animation: cs-wave-drift 15s linear infinite;
+  bottom: 0;
+}
+
+@keyframes cs-wave-drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Footer ── */
+.cs-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  text-align: center;
+  padding: 0.6rem;
+  font-size: 0.65rem;
+  color: #334155;
+  letter-spacing: 0.06em;
+}
+
+/* ── Animations ── */
+.fade-in-up {
+  animation: cs-fade-in-up 0.7s ease-out forwards;
+}
+
+@keyframes cs-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.delay-1 { animation-delay: 0.15s; opacity: 0; }
+.delay-2 { animation-delay: 0.3s; opacity: 0; }
+.delay-3 { animation-delay: 0.5s; opacity: 0; }
+.delay-4 { animation-delay: 0.7s; opacity: 0; }
+.delay-5 { animation-delay: 0.9s; opacity: 0; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cs-content {
+    padding: 1rem 1rem 12rem;
+  }
+
+  .cs-moon {
+    width: 40px;
+    height: 40px;
+    top: 6%;
+    right: 10%;
+  }
+
+  .cs-timer {
+    gap: 0.3rem;
+  }
+
+  .cs-timer__digits {
+    min-width: 56px;
+    padding: 0.6rem 0.5rem;
+    border-radius: 10px;
+  }
+
+  .cs-timer__sep {
+    font-size: 1.4rem;
+  }
+
+  .cs-email {
+    flex-direction: column;
+  }
+
+  .cs-email__btn {
+    border-radius: 0;
+  }
+
+  .cs-boat {
+    bottom: 40%;
+  }
+
+  .cs-ocean {
+    height: 30vh;
+  }
+
+  .cs-impact__pill {
+    font-size: 0.65rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .cs-timer__digits {
+    min-width: 48px;
+    padding: 0.5rem 0.4rem;
+  }
+
+  .cs-title {
+    font-size: 1.75rem;
+  }
+}

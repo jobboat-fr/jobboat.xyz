@@ -1,0 +1,120 @@
+/* ============================================
+   AUTH PAGE
+   ============================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--jb-space-6);
+  position: relative;
+}
+
+.auth-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 900px;
+  border-radius: var(--jb-radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--jb-glass-border);
+  background: var(--jb-glass-bg);
+  backdrop-filter: blur(var(--jb-glass-blur));
+  -webkit-backdrop-filter: blur(var(--jb-glass-blur));
+  box-shadow: var(--jb-shadow-lg);
+}
+
+/* Brand panel */
+.auth-brand {
+  background: linear-gradient(160deg, var(--jb-bg-base), var(--jb-bg-deep));
+  padding: var(--jb-space-10);
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--jb-border);
+}
+
+.auth-brand__inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-brand__features {
+  margin-top: var(--jb-space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-4);
+}
+
+.auth-brand__feature {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-3);
+  font-size: var(--jb-text-sm);
+  color: var(--jb-text-secondary);
+}
+
+/* Form panel */
+.auth-form-panel {
+  padding: var(--jb-space-10);
+  display: flex;
+  align-items: center;
+}
+
+.auth-form-panel__inner {
+  width: 100%;
+}
+
+.auth-form {
+  margin-top: var(--jb-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-5);
+}
+
+.auth-error {
+  color: var(--jb-danger, #ef4444);
+  font-size: var(--jb-text-sm);
+}
+
+.auth-info {
+  color: #94a3b8;
+  font-size: var(--jb-text-sm);
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+  padding: 10px 14px;
+  line-height: 1.5;
+}
+
+/* Loading spinner */
+.auth-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: auth-spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes auth-spin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-switch {
+  margin-top: var(--jb-space-6);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+  }
+  .auth-brand {
+    display: none;
+  }
+}

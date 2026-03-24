@@ -1,0 +1,410 @@
+/* ============================================
+   JOBBOAT V1 -- ANIMATIONS & MICRO-INTERACTIONS
+   Dopamine-triggering visual system
+   Spring physics + page transitions (Revolut-style)
+   ============================================ */
+
+/* --- Spring easing (use var(--jb-spring-*) in transitions) --- */
+.jb-spring { transition-timing-function: var(--jb-spring-snappy); }
+.jb-spring-smooth { transition-timing-function: var(--jb-spring-smooth); }
+.jb-spring-bounce { transition-timing-function: var(--jb-spring-bounce); }
+
+/* --- Page transitions (for React Router / AnimatePresence) --- */
+@keyframes pageSlideIn {
+  from { opacity: 0; transform: translateX(12px) scale(0.98); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes pageSlideOut {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to { opacity: 0; transform: translateX(-8px) scale(0.99); }
+}
+@keyframes pageFadeScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.page-transition-enter {
+  animation: pageSlideIn var(--jb-duration-normal) var(--jb-spring-smooth) forwards;
+}
+.page-transition-exit {
+  animation: pageSlideOut var(--jb-duration-fast) var(--jb-ease-out-expo) forwards;
+}
+.page-transition-fade {
+  animation: pageFadeScale var(--jb-duration-normal) var(--jb-spring-smooth) forwards;
+}
+
+/* --- Entrance Animations --- */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.5); }
+  70% { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes dropIn {
+  0% { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.slide-in-right { animation: slideInRight 0.5s var(--jb-spring-smooth) forwards; }
+.slide-in-left { animation: slideInLeft 0.5s var(--jb-spring-smooth) forwards; }
+.scale-in { animation: scaleIn 0.4s var(--jb-spring-smooth) forwards; }
+.pop-in { animation: popIn 0.5s var(--jb-spring-bounce) forwards; }
+.drop-in { animation: dropIn 0.4s var(--jb-spring-smooth) forwards; }
+
+/* --- Stagger children --- */
+.stagger-children > * { opacity: 0; animation: fadeInUp 0.5s ease-out forwards; }
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+
+/* --- Counter animation (number tick) --- */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.count-up { animation: countUp 0.6s ease-out forwards; }
+
+/* --- Shimmer loading --- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--jb-bg-raised) 25%,
+    var(--jb-bg-surface) 50%,
+    var(--jb-bg-raised) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--jb-radius-md);
+}
+
+/* --- Progress ring --- */
+@keyframes progressFill {
+  from { stroke-dashoffset: var(--progress-circumference, 283); }
+  to { stroke-dashoffset: var(--progress-offset, 0); }
+}
+.progress-ring__circle {
+  transition: stroke-dashoffset 1s ease-out;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  animation: progressFill 1.2s ease-out forwards;
+}
+
+/* --- Glow pulse for active elements --- */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--jb-accent-glow); }
+  50% { box-shadow: 0 0 24px var(--jb-accent-glow), 0 0 48px rgba(0, 102, 255, 0.15); }
+}
+.glow-pulse { animation: glowPulse 2.5s ease-in-out infinite; }
+
+/* --- Confetti burst (CSS only) --- */
+@keyframes confetti-fall {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateY(120px) rotate(720deg) scale(0.3); }
+}
+.confetti-container {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall 2s ease-out forwards;
+}
+
+/* --- Toast notifications --- */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(100%) scale(0.9); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
+}
+
+.toast-container {
+  position: fixed;
+  top: var(--jb-space-6);
+  right: var(--jb-space-6);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-3);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-3);
+  padding: var(--jb-space-4) var(--jb-space-5);
+  background: var(--jb-bg-raised);
+  border: 1px solid var(--jb-border);
+  border-radius: var(--jb-radius-lg);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--jb-shadow-lg);
+  animation: toastIn 0.4s ease-out forwards;
+  max-width: 380px;
+  min-width: 280px;
+}
+.toast--exiting { animation: toastOut 0.3s ease-in forwards; }
+.toast--success { border-left: 3px solid var(--jb-success); }
+.toast--error { border-left: 3px solid var(--jb-danger); }
+.toast--info { border-left: 3px solid var(--jb-accent); }
+.toast--warning { border-left: 3px solid var(--jb-warning); }
+
+.toast__icon {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+}
+.toast__content {
+  flex: 1;
+}
+.toast__title {
+  font-size: var(--jb-text-sm);
+  font-weight: var(--jb-weight-semibold);
+  color: var(--jb-text-primary);
+}
+.toast__message {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-secondary);
+  margin-top: 2px;
+}
+
+/* --- Streak flame --- */
+@keyframes flameDance {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  25% { transform: scaleY(1.1) scaleX(0.95); }
+  50% { transform: scaleY(0.95) scaleX(1.05); }
+  75% { transform: scaleY(1.05) scaleX(0.98); }
+}
+.streak-flame {
+  display: inline-block;
+  animation: flameDance 0.8s ease-in-out infinite;
+}
+
+/* --- XP bar animation --- */
+@keyframes xpFill {
+  from { width: 0; }
+}
+.xp-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--jb-bg-surface);
+  overflow: hidden;
+  position: relative;
+}
+.xp-bar__fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--jb-accent), var(--jb-accent-secondary));
+  animation: xpFill 1.2s ease-out forwards;
+  position: relative;
+}
+.xp-bar__fill::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 30px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+}
+
+/* --- Level badge --- */
+@keyframes levelUp {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.3); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--jb-accent), var(--jb-accent-secondary));
+  color: #fff;
+  font-family: var(--jb-font-display);
+  font-weight: var(--jb-weight-bold);
+  font-size: var(--jb-text-sm);
+  box-shadow: 0 0 16px var(--jb-accent-glow);
+}
+.level-badge--animating { animation: levelUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+/* --- Typing indicator (chatbot) --- */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: var(--jb-space-3) var(--jb-space-4);
+}
+.typing-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--jb-text-muted);
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* --- Hover lift --- */
+.hover-lift {
+  transition: transform var(--jb-transition-fast), box-shadow var(--jb-transition-fast);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--jb-shadow-lg);
+}
+
+/* --- Magnetic button effect --- */
+.btn-magnetic {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.btn-magnetic:hover {
+  transform: scale(1.04);
+  box-shadow: var(--jb-shadow-glow);
+}
+.btn-magnetic:active {
+  transform: scale(0.97);
+}
+
+/* --- Gradient text --- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--jb-accent), var(--jb-accent-secondary), #e879f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- Animated border gradient --- */
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.border-glow {
+  position: relative;
+  overflow: hidden;
+}
+.border-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    270deg,
+    var(--jb-accent),
+    var(--jb-accent-secondary),
+    #e879f9,
+    var(--jb-accent)
+  );
+  background-size: 400% 400%;
+  animation: borderGlow 6s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* --- Notification dot --- */
+.notif-dot {
+  position: absolute;
+  top: -2px; right: -2px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--jb-danger);
+  box-shadow: 0 0 6px var(--jb-danger);
+}
+.notif-dot--animated {
+  animation: glowPulse 2s infinite;
+}
+
+/* --- Ripple effect on click --- */
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-container .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+/* --- Breathing animation (subtle idle pulse) --- */
+@keyframes breathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.012); }
+}
+.breathing {
+  animation: breathing 4s ease-in-out infinite;
+}
+[data-idle="true"] .breathing {
+  animation-play-state: running;
+}
+
+/* --- Chat message slide-in --- */
+@keyframes chatSlideFromBottom {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes chatSlideFromLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* --- Slide up for counters with IntersectionObserver --- */
+@keyframes countReveal {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.count-reveal {
+  animation: countReveal 0.6s var(--jb-spring-smooth) forwards;
+}
+
+/* --- Stagger with spring --- */
+.stagger-spring > * { opacity: 0; animation: fadeInUp 0.4s var(--jb-spring-smooth) forwards; }
+.stagger-spring > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger-spring > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger-spring > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger-spring > *:nth-child(4) { animation-delay: 0.16s; }
+.stagger-spring > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger-spring > *:nth-child(6) { animation-delay: 0.24s; }
+.stagger-spring > *:nth-child(7) { animation-delay: 0.28s; }
+.stagger-spring > *:nth-child(8) { animation-delay: 0.32s; }

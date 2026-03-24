@@ -1,0 +1,375 @@
+/* ============================================
+   ADMIN PAGES -- Galactic Luxe
+   ============================================ */
+
+/* --- Admin Page Container --- */
+.admin-page {
+  min-height: 100vh;
+  padding: var(--jb-space-6) var(--jb-space-8);
+  max-width: var(--jb-max-width);
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-6);
+}
+
+/* --- Admin Login --- */
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: var(--jb-space-6);
+}
+
+.admin-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 420px;
+}
+
+.admin-login-card {
+  width: 100%;
+  padding: var(--jb-space-10);
+}
+
+.admin-login-lock {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--jb-accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--jb-space-5);
+  color: var(--jb-accent);
+}
+
+.admin-login-form {
+  margin-top: var(--jb-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-5);
+}
+
+/* --- Admin Header --- */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--jb-space-5) var(--jb-space-6);
+  border-radius: var(--jb-radius-lg);
+}
+
+.admin-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-3);
+}
+
+/* --- Views Nav --- */
+.admin-views-nav {
+  display: flex;
+  gap: var(--jb-space-2);
+  flex-wrap: wrap;
+}
+
+/* --- Admin Section --- */
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-4);
+}
+
+/* --- Stat Cards Grid --- */
+.admin-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jb-space-4);
+}
+
+.admin-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-5);
+}
+
+/* --- Tables --- */
+.admin-table-wrap {
+  overflow-x: auto;
+  padding: var(--jb-space-4);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--jb-text-sm);
+}
+
+.admin-table th {
+  text-align: left;
+  padding: var(--jb-space-3) var(--jb-space-4);
+  font-size: var(--jb-text-xs);
+  font-weight: var(--jb-weight-semibold);
+  color: var(--jb-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--jb-border);
+}
+
+.admin-table td {
+  padding: var(--jb-space-3) var(--jb-space-4);
+  border-bottom: 1px solid var(--jb-border);
+  color: var(--jb-text-secondary);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* --- Two Column --- */
+.admin-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--jb-space-4);
+}
+
+/* --- Actions Row --- */
+.admin-actions-row {
+  display: flex;
+  gap: var(--jb-space-3);
+  margin-top: var(--jb-space-4);
+}
+
+/* --- Highlights --- */
+.admin-highlights-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-3);
+}
+
+.admin-highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--jb-space-3) var(--jb-space-4);
+  border-radius: var(--jb-radius-md);
+  border-left: 3px solid var(--jb-accent);
+}
+
+.admin-highlight--warning {
+  border-left-color: var(--jb-warning);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.admin-highlight--error {
+  border-left-color: var(--jb-danger);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.admin-highlight--info {
+  border-left-color: var(--jb-accent);
+  background: rgba(0, 102, 255, 0.05);
+}
+
+.admin-highlight-title {
+  font-weight: var(--jb-weight-semibold);
+  font-size: var(--jb-text-sm);
+}
+
+/* --- Loading --- */
+.admin-loading {
+  text-align: center;
+  padding: var(--jb-space-16);
+  font-size: var(--jb-text-lg);
+}
+
+/* --- API Key Cards --- */
+.admin-apikey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--jb-space-4);
+}
+
+.admin-apikey-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-5);
+}
+
+.admin-apikey-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--jb-space-2);
+}
+
+.admin-apikey-input-row {
+  display: flex;
+  gap: var(--jb-space-2);
+  align-items: center;
+}
+
+.admin-apikey-input-row .input {
+  flex: 1;
+}
+
+/* --- Quick Start Steps --- */
+.admin-quickstart-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jb-space-3);
+}
+
+.admin-quickstart-step {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-3);
+  padding: var(--jb-space-4);
+  font-size: var(--jb-text-sm);
+}
+
+.admin-quickstart-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--jb-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--jb-weight-bold);
+  font-size: var(--jb-text-sm);
+  flex-shrink: 0;
+}
+
+/* --- Health Bars --- */
+.admin-health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jb-space-4);
+}
+
+.admin-health-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-4);
+}
+
+.admin-health-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: var(--jb-bg-surface);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.admin-health-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width var(--jb-transition-slow);
+}
+
+/* --- Log Viewer --- */
+.admin-log-filters {
+  display: flex;
+  gap: var(--jb-space-1);
+}
+
+.admin-log-list {
+  max-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-log-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--jb-space-3);
+  padding: var(--jb-space-3) var(--jb-space-4);
+  border-left: 3px solid var(--jb-accent);
+  border-bottom: 1px solid var(--jb-border);
+  font-size: var(--jb-text-xs);
+  flex-wrap: wrap;
+}
+
+.admin-log-time {
+  flex-shrink: 0;
+  font-family: var(--jb-font-mono);
+  min-width: 140px;
+}
+
+.admin-log-level {
+  font-weight: var(--jb-weight-bold);
+  min-width: 70px;
+}
+
+.admin-log-message {
+  color: var(--jb-text-primary);
+  flex: 1;
+}
+
+.admin-log-details {
+  width: 100%;
+  margin-top: var(--jb-space-2);
+  padding: var(--jb-space-2);
+  background: var(--jb-bg-deep);
+  border-radius: var(--jb-radius-sm);
+  font-size: 0.7rem;
+  color: var(--jb-text-muted);
+  overflow-x: auto;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .admin-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-health-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-two-col {
+    grid-template-columns: 1fr;
+  }
+  .admin-quickstart-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-page {
+    padding: var(--jb-space-4);
+  }
+  .admin-header {
+    flex-direction: column;
+    gap: var(--jb-space-4);
+    align-items: flex-start;
+  }
+  .admin-overview-grid,
+  .admin-health-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-apikey-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-quickstart-steps {
+    grid-template-columns: 1fr;
+  }
+  .admin-views-nav {
+    overflow-x: auto;
+  }
+}

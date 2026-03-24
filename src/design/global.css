@@ -1,0 +1,194 @@
+/* ============================================
+   JOBBOAT V1 -- GLOBAL STYLES
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--jb-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--jb-text-muted);
+}
+
+/* --- Selection --- */
+::selection {
+  background: var(--jb-accent-glow);
+  color: #fff;
+}
+
+/* --- Links --- */
+a {
+  color: var(--jb-accent);
+  text-decoration: none;
+  transition: color var(--jb-transition-fast);
+}
+a:hover {
+  color: var(--jb-accent-hover);
+}
+
+/* --- Focus ring --- */
+:focus-visible {
+  outline: 2px solid var(--jb-accent);
+  outline-offset: 2px;
+}
+
+/* --- Backgrounds for pages --- */
+
+/* Gradient flow: follows pointer in real time, hue shifts with scroll */
+.page-bg-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 100% 70% at var(--jb-flow-x, 50%) var(--jb-flow-y, 50%),
+    hsl(var(--jb-flow-hue, 220), var(--jb-flow-saturation, 80%), 14%),
+    transparent 55%
+  );
+  opacity: 0.40;
+  transition: opacity 1.5s ease;
+  will-change: background;
+}
+
+/* On idle: fade the pointer gradient and let the orbital take over */
+[data-idle="true"] .page-bg-gradient {
+  opacity: 0.20;
+}
+
+/* Orbital orbs -- slow binary system, alive ambient */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-bg::before,
+.page-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  top: 50%;
+  left: 50%;
+  opacity: 0.5;
+  transition: opacity 2s ease;
+}
+
+/* On idle: orbs become more visible */
+[data-idle="true"] .page-bg::before,
+[data-idle="true"] .page-bg::after {
+  opacity: 0.8;
+}
+
+/* Orb 1 -- light gray */
+.page-bg::before {
+  width: 500px;
+  height: 500px;
+  margin-top: -250px;
+  margin-left: -250px;
+  background: radial-gradient(circle, rgba(226, 232, 240, 0.08), transparent 70%);
+  animation: orb-binary-1 32s linear infinite;
+}
+
+/* Orb 2 -- mid gray */
+.page-bg::after {
+  width: 420px;
+  height: 420px;
+  margin-top: -210px;
+  margin-left: -210px;
+  background: radial-gradient(circle, rgba(148, 163, 184, 0.06), transparent 70%);
+  animation: orb-binary-2 32s linear infinite;
+}
+
+@keyframes orb-binary-1 {
+  0%   { transform: translate(200px, 0) scale(1); }
+  25%  { transform: translate(0, 150px) scale(1.05); }
+  50%  { transform: translate(-200px, 0) scale(1); }
+  75%  { transform: translate(0, -150px) scale(0.95); }
+  100% { transform: translate(200px, 0) scale(1); }
+}
+
+@keyframes orb-binary-2 {
+  0%   { transform: translate(-200px, 0) scale(1); }
+  25%  { transform: translate(0, -150px) scale(0.95); }
+  50%  { transform: translate(200px, 0) scale(1); }
+  75%  { transform: translate(0, 150px) scale(1.05); }
+  100% { transform: translate(-200px, 0) scale(1); }
+}
+
+@media (max-width: 640px) {
+  .page-bg::before { width: 280px; height: 280px; margin: -140px 0 0 -140px; }
+  .page-bg::after  { width: 240px; height: 240px; margin: -120px 0 0 -120px; }
+
+  @keyframes orb-binary-1 {
+    0%   { transform: translate(100px, 0) scale(1); }
+    25%  { transform: translate(0, 80px) scale(1.05); }
+    50%  { transform: translate(-100px, 0) scale(1); }
+    75%  { transform: translate(0, -80px) scale(0.95); }
+    100% { transform: translate(100px, 0) scale(1); }
+  }
+  @keyframes orb-binary-2 {
+    0%   { transform: translate(-100px, 0) scale(1); }
+    25%  { transform: translate(0, -80px) scale(0.95); }
+    50%  { transform: translate(100px, 0) scale(1); }
+    75%  { transform: translate(0, 80px) scale(1.05); }
+    100% { transform: translate(-100px, 0) scale(1); }
+  }
+}
+
+/* --- Stars / particle BG for landing --- */
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(255, 255, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 60% 20%, rgba(255, 255, 255, 0.25), transparent),
+    radial-gradient(1px 1px at 80% 60%, rgba(255, 255, 255, 0.15), transparent),
+    radial-gradient(1.5px 1.5px at 10% 80%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1.5px 1.5px at 90% 40%, rgba(255, 255, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.15), transparent),
+    radial-gradient(1px 1px at 75% 85%, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200px 200px;
+  animation: star-twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes star-twinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* --- Fade in animation --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; opacity: 0; }
+.delay-2 { animation-delay: 0.2s; opacity: 0; }
+.delay-3 { animation-delay: 0.3s; opacity: 0; }
+.delay-4 { animation-delay: 0.4s; opacity: 0; }
+.delay-5 { animation-delay: 0.5s; opacity: 0; }

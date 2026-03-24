@@ -1,0 +1,83 @@
+{
+  "name": "JobBoat — Recherche d'emploi IA, Candidature automatique, CV Builder",
+  "short_name": "JobBoat",
+  "description": "Plateforme IA qui automatise votre recherche d'emploi : candidatures automatiques, coaching carriere, creation de CV intelligent, matching d'offres. Trouvez un CDI, CDD, stage, alternance ou freelance plus vite avec l'intelligence artificielle.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#030711",
+  "background_color": "#030711",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": [
+    "business",
+    "productivity",
+    "education",
+    "utilities"
+  ],
+  "iarc_rating_id": "",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "JobBoat - Tableau de bord de recherche d'emploi IA"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Creer mon CV",
+      "short_name": "CV Builder",
+      "description": "Creez et optimisez votre CV avec l'intelligence artificielle",
+      "url": "/cv-builder",
+      "icons": [{"src": "/favicon-32.png", "sizes": "32x32"}]
+    },
+    {
+      "name": "Coaching Carriere IA",
+      "short_name": "Coaching",
+      "description": "Session de coaching adaptatif avec intelligence artificielle",
+      "url": "/coaching",
+      "icons": [{"src": "/favicon-32.png", "sizes": "32x32"}]
+    },
+    {
+      "name": "Auto-Candidature",
+      "short_name": "Postuler",
+      "description": "Candidatures automatiques personnalisees par IA",
+      "url": "/auto-apply",
+      "icons": [{"src": "/favicon-32.png", "sizes": "32x32"}]
+    },
+    {
+      "name": "Rechercher un emploi",
+      "short_name": "Emplois",
+      "description": "Trouvez des offres CDI CDD stage alternance freelance",
+      "url": "/auto-apply",
+      "icons": [{"src": "/favicon-32.png", "sizes": "32x32"}]
+    }
+  ],
+  "related_applications": [],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}

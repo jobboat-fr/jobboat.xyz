@@ -1,0 +1,76 @@
+.delete-account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-6);
+  min-height: 100%;
+}
+
+.delete-account__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--jb-space-4);
+  flex-wrap: wrap;
+}
+
+.delete-account__header .btn {
+  padding: var(--jb-space-2) var(--jb-space-4);
+}
+
+.delete-account__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-3);
+}
+
+.delete-account__list {
+  margin-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  color: var(--jb-text-secondary, #94a3b8);
+  line-height: 1.6;
+}
+
+.delete-account__danger {
+  border-color: rgba(239, 68, 68, 0.45);
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.08);
+}
+
+.delete-account__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-3);
+  margin-top: var(--jb-space-2);
+}
+
+.delete-account__input {
+  max-width: 280px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.delete-account__status {
+  padding: var(--jb-space-3) var(--jb-space-4);
+  border-radius: var(--jb-radius-md, 8px);
+  font-size: var(--jb-text-sm, 0.9rem);
+}
+
+.delete-account__status--error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.delete-account__status--success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+@media (max-width: 640px) {
+  .delete-account__input {
+    max-width: 100%;
+  }
+}

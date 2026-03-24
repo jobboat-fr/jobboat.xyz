@@ -1,0 +1,467 @@
+/* ============================================
+   SETTINGS – Tabbed Layout
+   ============================================ */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-6);
+}
+
+/* ── Tabs ── */
+.settings__tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--jb-bg-surface, #1e293b);
+  border-radius: var(--jb-radius-lg, 12px);
+  padding: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.settings__tabs::-webkit-scrollbar { display: none; }
+
+.settings__tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: var(--jb-radius-md, 8px);
+  border: none;
+  background: transparent;
+  color: var(--jb-text-secondary, #94a3b8);
+  font-size: var(--jb-text-sm, 0.875rem);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.settings__tab:hover {
+  color: var(--jb-text-primary, #f1f5f9);
+  background: rgba(255, 255, 255, 0.04);
+}
+.settings__tab--active {
+  background: var(--jb-accent, #1a3a5c);
+  color: #e8edf3;
+  box-shadow: 0 0 12px rgba(30, 74, 114, 0.2);
+}
+.settings__tab svg {
+  flex-shrink: 0;
+}
+
+/* ── Tab content ── */
+.settings__tab-content {
+  min-height: 400px;
+}
+
+/* ── Grid (profile tab) ── */
+.settings__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--jb-space-6);
+}
+
+.settings__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings__section-title {
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: var(--jb-text-lg, 1.1rem);
+}
+
+.settings__field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--jb-space-4);
+}
+
+.settings__textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+/* ── Flash messages ── */
+.settings__flash {
+  padding: 10px 16px;
+  border-radius: var(--jb-radius-md, 8px);
+  font-size: var(--jb-text-sm);
+  line-height: 1.5;
+}
+.settings__flash--success {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+.settings__flash--error {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+.settings__flash--info {
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+/* ── Avatar ── */
+.settings__avatar-section { grid-column: 1 / -1; }
+
+.settings__avatar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-6);
+}
+
+.settings__avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--jb-bg-surface, #1e293b);
+  border: 2px solid var(--jb-border, rgba(148, 163, 184, 0.12));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
+}
+.settings__avatar-circle:hover { border-color: var(--jb-accent-light, #2d6aa0); }
+
+.settings__avatar-img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+}
+
+.settings__avatar-letter {
+  font-size: 2rem; font-weight: 700;
+  color: var(--jb-text-primary, #f1f5f9); line-height: 1;
+}
+
+.settings__avatar-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s ease; color: #fff;
+}
+.settings__avatar-circle:hover .settings__avatar-overlay { opacity: 1; }
+
+.settings__avatar-info { display: flex; flex-direction: column; }
+
+/* ── Toggle ── */
+.settings__toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--jb-space-4);
+  padding: var(--jb-space-3) 0;
+  border-bottom: 1px solid var(--jb-border);
+}
+.settings__toggle-row:last-child { border-bottom: none; }
+
+.settings__toggle {
+  width: 44px; height: 24px; border-radius: 12px;
+  background: var(--jb-bg-surface); border: 1px solid var(--jb-border);
+  cursor: pointer; position: relative;
+  transition: all var(--jb-transition-fast); flex-shrink: 0;
+}
+.settings__toggle--on {
+  background: var(--jb-accent); border-color: var(--jb-accent);
+}
+.settings__toggle-knob {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; position: absolute; top: 2px; left: 2px;
+  transition: transform var(--jb-transition-fast);
+}
+.settings__toggle--on .settings__toggle-knob { transform: translateX(20px); }
+
+/* ── Actions ── */
+.settings__actions {
+  display: flex; flex-direction: column; gap: var(--jb-space-3);
+}
+
+/* ── Info grid ── */
+.settings__info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--jb-space-4);
+}
+.settings__info-grid > div {
+  display: flex; flex-direction: column; gap: var(--jb-space-1);
+}
+
+/* ============================================
+   BILLING TAB
+   ============================================ */
+.settings__billing {
+  display: flex; flex-direction: column; gap: var(--jb-space-6);
+}
+
+.settings__plan-badge {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+
+.settings__billing-summary {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+.settings__billing-stat {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--jb-radius-md, 8px);
+  border: 1px solid var(--jb-border, rgba(148, 163, 184, 0.08));
+}
+.settings__billing-stat-value {
+  font-size: 1.25rem; font-weight: 700;
+  color: var(--jb-text-primary, #f1f5f9);
+}
+
+/* ── Empty state ── */
+.settings__empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 20px; text-align: center;
+  color: var(--jb-text-secondary, #94a3b8);
+  gap: 8px;
+}
+.settings__empty-state svg {
+  width: 40px; height: 40px; opacity: 0.4; margin-bottom: 8px;
+}
+.settings__empty-state p {
+  font-weight: 500; font-size: var(--jb-text-base, 1rem);
+}
+
+/* ============================================
+   SUBSCRIPTION TAB – Plans Grid
+   ============================================ */
+.settings__subscription {
+  display: flex; flex-direction: column;
+}
+
+.settings__plans-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+
+.settings__plan-card {
+  display: flex; flex-direction: column;
+  padding: 24px; position: relative;
+  border: 1px solid var(--jb-border, rgba(148, 163, 184, 0.12));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.settings__plan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.settings__plan-card--popular {
+  border-color: var(--jb-accent, #3b82f6);
+  box-shadow: 0 0 0 1px var(--jb-accent, #3b82f6), 0 4px 16px rgba(59, 130, 246, 0.15);
+}
+.settings__plan-card--current {
+  opacity: 0.85;
+}
+
+.settings__plan-popular-tag {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--jb-accent, #3b82f6); color: #fff;
+  padding: 4px 14px; border-radius: 20px;
+  font-size: var(--jb-text-xs, 0.75rem); font-weight: 600;
+  white-space: nowrap;
+}
+
+.settings__plan-name {
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;
+}
+
+.settings__plan-price {
+  display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px;
+}
+.settings__plan-amount {
+  font-size: 2rem; font-weight: 800;
+  color: var(--jb-text-primary, #f1f5f9);
+}
+
+.settings__plan-features {
+  list-style: none; padding: 0; margin: 0 0 24px 0;
+  display: flex; flex-direction: column; gap: 10px; flex: 1;
+}
+.settings__plan-features li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: var(--jb-text-sm, 0.875rem);
+  color: var(--jb-text-secondary, #94a3b8);
+}
+.settings__plan-features li svg {
+  flex-shrink: 0; margin-top: 2px;
+  color: #4ade80;
+}
+
+/* ── FAQ ── */
+.settings__faq {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.settings__faq-item h4 {
+  font-size: var(--jb-text-sm, 0.875rem); font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--jb-text-primary, #f1f5f9);
+}
+.settings__faq-item p {
+  font-size: var(--jb-text-sm, 0.875rem); line-height: 1.5;
+}
+
+/* ============================================
+   PAYMENT TAB
+   ============================================ */
+.settings__payment {
+  display: flex; flex-direction: column; gap: var(--jb-space-6);
+}
+
+.settings__payment-methods {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.settings__payment-method-btn {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 16px; text-align: left;
+  border-radius: var(--jb-radius-md, 8px);
+  border: 1px solid var(--jb-border, rgba(148, 163, 184, 0.12));
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--jb-text-primary, #f1f5f9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.settings__payment-method-btn:hover {
+  border-color: var(--jb-accent-light, #2d6aa0);
+  background: rgba(26, 58, 92, 0.1);
+}
+
+/* ============================================
+   PREFERENCES TAB
+   ============================================ */
+.settings__preferences {
+  display: flex; flex-direction: column; gap: var(--jb-space-6);
+}
+
+/* ============================================
+   SYSTEM TAB
+   ============================================ */
+.settings__system {
+  display: flex; flex-direction: column; gap: var(--jb-space-6);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .settings__plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .settings__billing-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stripe promo banner */
+.settings__promo-banner {
+  background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(147,51,234,0.12));
+  border: 1px solid rgba(59,130,246,0.3);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+.settings__promo-content strong {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  color: var(--jb-accent, #3b82f6);
+}
+.settings__promo-content p {
+  margin: 0;
+  font-size: var(--jb-text-sm, 0.875rem);
+  opacity: 0.85;
+}
+
+.settings__plan-current-tag {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.settings__plan-trial-badge {
+  background: rgba(59,130,246,0.12);
+  color: var(--jb-accent, #3b82f6);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/* Payment Stripe info */
+.settings__payment-stripe-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+}
+.settings__payment-stripe-info svg {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+}
+
+/* Security list */
+.settings__security-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.settings__security-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--jb-text-sm, 0.875rem);
+}
+.settings__security-list li svg {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .settings__grid {
+    grid-template-columns: 1fr;
+  }
+  .settings__avatar-section { grid-column: 1; }
+  .settings__avatar-circle { width: 64px; height: 64px; }
+  .settings__avatar-letter { font-size: 1.5rem; }
+
+  .settings__tabs {
+    gap: 2px; padding: 3px;
+  }
+  .settings__tab {
+    padding: 8px 12px; font-size: 0.8rem;
+  }
+  .settings__tab span:not(.settings__tab svg) {
+    display: none;
+  }
+  .settings__tab svg + span {
+    display: none;
+  }
+}

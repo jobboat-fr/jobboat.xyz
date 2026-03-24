@@ -1,0 +1,159 @@
+/* ============================================
+   JOBBOAT V1 -- DESIGN TOKENS
+   Revolut Alive Theme -- Dark + Strategic Accents
+   ============================================ */
+
+:root {
+  /* --- Palette: dark monochrome base --- */
+  --jb-bg-deepest: #030711;
+  --jb-bg-deep: #050a18;
+  --jb-bg-base: #0b1220;
+  --jb-bg-raised: #111827;
+  --jb-bg-surface: #1e293b;
+
+  /* --- Accent colors: navy blue with subtle shine --- */
+  --jb-accent: #2563a0;
+  --jb-accent-hover: #3b82c4;
+  --jb-accent-glow: rgba(37, 99, 160, 0.25);
+  --jb-accent-light: #4a9ad4;
+  --jb-accent-secondary: #94a3b8;
+  --jb-accent-secondary-glow: rgba(148, 163, 184, 0.10);
+
+  --jb-success: #10b981;
+  --jb-warning: #f59e0b;
+  --jb-danger: #ef4444;
+
+  /* --- Text: clean hierarchy --- */
+  --jb-text-primary: #f1f5f9;
+  --jb-text-secondary: #94a3b8;
+  --jb-text-muted: #8b9bb5;
+  --jb-text-inverse: #0b1220;
+
+  /* --- Borders: subtle monochrome --- */
+  --jb-border: rgba(148, 163, 184, 0.10);
+  --jb-border-accent: rgba(30, 74, 114, 0.25);
+
+  /* --- Typography --- */
+  --jb-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --jb-font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --jb-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --jb-text-xs: 0.75rem;
+  --jb-text-sm: 0.875rem;
+  --jb-text-base: 1rem;
+  --jb-text-lg: 1.125rem;
+  --jb-text-xl: 1.25rem;
+  --jb-text-2xl: 1.5rem;
+  --jb-text-3xl: 1.875rem;
+  --jb-text-4xl: 2.25rem;
+  --jb-text-5xl: 3rem;
+  --jb-text-6xl: 3.75rem;
+
+  --jb-leading-tight: 1.15;
+  --jb-leading-normal: 1.5;
+  --jb-leading-relaxed: 1.7;
+
+  --jb-weight-normal: 400;
+  --jb-weight-medium: 500;
+  --jb-weight-semibold: 600;
+  --jb-weight-bold: 700;
+
+  /* --- Spacing --- */
+  --jb-space-1: 0.25rem;
+  --jb-space-2: 0.5rem;
+  --jb-space-3: 0.75rem;
+  --jb-space-4: 1rem;
+  --jb-space-5: 1.25rem;
+  --jb-space-6: 1.5rem;
+  --jb-space-8: 2rem;
+  --jb-space-10: 2.5rem;
+  --jb-space-12: 3rem;
+  --jb-space-16: 4rem;
+  --jb-space-20: 5rem;
+  --jb-space-24: 6rem;
+
+  /* --- Radius --- */
+  --jb-radius-sm: 6px;
+  --jb-radius-md: 10px;
+  --jb-radius-lg: 16px;
+  --jb-radius-xl: 24px;
+  --jb-radius-full: 9999px;
+
+  /* ── Neon / Glow (Jobby Mind accent) ── */
+  --jb-neon-blue: #4f9eff;
+  --jb-neon-violet: #8b5cf6;
+  --jb-neon-glow: 0 0 16px rgba(79,158,255,0.45), 0 0 40px rgba(79,158,255,0.18);
+  --jb-neon-glow-sm: 0 0 8px rgba(79,158,255,0.35);
+  --jb-input-ring: 0 0 0 2px rgba(79,158,255,0.55);
+
+  /* ── Glassmorphism ── */
+  --jb-glass-bg: rgba(11, 18, 32, 0.6);
+  --jb-glass-border: rgba(148, 163, 184, 0.08);
+  --jb-glass-strong-bg: rgba(255,255,255,0.09);
+  --jb-glass-strong-border: rgba(255,255,255,0.14);
+  --jb-glass-blur: 20px;
+
+  /* --- Shadows --- */
+  --jb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --jb-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --jb-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --jb-shadow-glow: 0 0 30px var(--jb-accent-glow);
+  --jb-shadow-glow-secondary: 0 0 30px var(--jb-accent-secondary-glow);
+
+  /* --- Transitions --- */
+  --jb-transition-fast: 150ms ease;
+  --jb-transition-base: 250ms ease;
+  --jb-transition-slow: 400ms ease;
+
+  /* --- Z-index --- */
+  --jb-z-base: 1;
+  --jb-z-dropdown: 100;
+  --jb-z-sticky: 200;
+  --jb-z-overlay: 500;
+  --jb-z-modal: 1000;
+
+  /* --- Layout --- */
+  --jb-sidebar-width: 260px;
+  --jb-topbar-height: 64px;
+  --jb-max-width: 1440px;
+
+  /* --- Motion & Physics (alive / Revolut-style) --- */
+  --jb-spring-snappy: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --jb-spring-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --jb-spring-bounce: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --jb-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --jb-duration-instant: 80ms;
+  --jb-duration-fast: 150ms;
+  --jb-duration-normal: 300ms;
+  --jb-duration-slow: 500ms;
+  --jb-duration-cinematic: 800ms;
+
+  /* --- Depth layers (parallax multipliers) --- */
+  --jb-depth-0: 0;
+  --jb-depth-1: 0.02;
+  --jb-depth-2: 0.05;
+  --jb-depth-3: 0.08;
+  --jb-depth-4: 0.12;
+  --jb-depth-5: 0.18;
+
+  /* --- Gravity state (updated by JS via GravityProvider) --- */
+  --jb-tilt-x: 0;
+  --jb-tilt-y: 0;
+  --jb-pointer-x: 50%;
+  --jb-pointer-y: 50%;
+  --jb-scroll-progress: 0;
+
+  /* --- Gradient flow --- */
+  --jb-flow-hue: 220;
+  --jb-flow-saturation: 80%;
+  --jb-flow-x: 50%;
+  --jb-flow-y: 50%;
+}
+
+/* --- Breakpoints (reference only, use in media queries) ---
+   sm: 640px
+   md: 768px
+   lg: 1024px
+   xl: 1280px
+   2xl: 1440px
+*/

@@ -1,0 +1,106 @@
+/* ============================================
+   PROFILE & KPIs
+   ============================================ */
+
+.profile-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-8);
+}
+
+.profile-kpi__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* User Card */
+.profile-kpi__user-card {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-6);
+  padding: var(--jb-space-8);
+}
+
+.profile-kpi__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--jb-accent), var(--jb-accent-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-2xl);
+  font-weight: var(--jb-weight-bold);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.profile-kpi__user-info {
+  flex: 1;
+}
+
+.profile-kpi__overall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--jb-space-1);
+}
+
+/* Charts grid */
+.profile-kpi__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--jb-space-6);
+}
+
+.profile-kpi__chart-card {
+  padding: var(--jb-space-6);
+}
+
+/* Dimensions */
+.profile-kpi__dims-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jb-space-4);
+}
+
+.profile-kpi__dim-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-4);
+}
+
+.profile-kpi__dim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-kpi__dim-label {
+  font-size: var(--jb-text-sm);
+  font-weight: var(--jb-weight-medium);
+  color: var(--jb-text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .profile-kpi__grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-kpi__dims-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-kpi__user-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .profile-kpi__dims-grid {
+    grid-template-columns: 1fr;
+  }
+}

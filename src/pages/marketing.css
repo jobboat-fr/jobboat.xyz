@@ -1,0 +1,53 @@
+/* ============================================
+   MARKETING ENGINE
+   ============================================ */
+.marketing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-8);
+}
+
+.mkt-tools__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jb-space-4);
+}
+
+.mkt-tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-5) var(--jb-space-4);
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid var(--jb-glass-border);
+  transition: all var(--jb-transition-fast);
+}
+
+.mkt-tool-card--active {
+  border-color: var(--jb-accent) !important;
+  box-shadow: var(--jb-shadow-glow) !important;
+  background: rgba(0, 102, 255, 0.06);
+}
+
+.mkt-tool-card__icon { font-size: 32px; line-height: 1; }
+
+.mkt-tool-card__label {
+  font-size: var(--jb-text-sm);
+  font-weight: var(--jb-weight-semibold);
+  color: var(--jb-text-primary);
+}
+
+.mkt-tool-card__desc {
+  font-size: var(--jb-text-xs);
+  line-height: 1.4;
+}
+
+@media (max-width: 1024px) {
+  .mkt-tools__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .mkt-tools__grid { grid-template-columns: 1fr; }
+}

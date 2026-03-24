@@ -1,0 +1,534 @@
+/* ============================================
+   PRICING PAGE -- JobBoat
+   ============================================ */
+
+.pricing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-8);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: var(--jb-space-12);
+}
+
+/* ── Hero ── */
+.pricing__hero {
+  text-align: center;
+  padding: var(--jb-space-8) 0 var(--jb-space-4);
+}
+
+.pricing__hero-title {
+  font-family: var(--jb-font-display);
+  font-size: 2rem;
+  font-weight: var(--jb-weight-bold);
+  letter-spacing: -0.03em;
+  color: var(--jb-text-primary);
+  margin-bottom: var(--jb-space-3);
+}
+
+.pricing__hero-sub {
+  color: var(--jb-text-secondary);
+  font-size: var(--jb-text-base);
+  max-width: 520px;
+  margin: 0 auto var(--jb-space-6);
+  line-height: var(--jb-leading-relaxed);
+}
+
+/* Trial badge */
+.pricing__trial-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--jb-space-2);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--jb-success);
+  padding: 8px 20px;
+  border-radius: var(--jb-radius-full);
+  font-size: var(--jb-text-sm);
+  font-weight: 500;
+  margin-top: var(--jb-space-3);
+}
+
+/* ── Plans Grid ── */
+.pricing__plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jb-space-5);
+  align-items: start;
+}
+
+.pricing__plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--jb-radius-lg);
+  padding: var(--jb-space-7);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pricing__plan:hover {
+  transform: translateY(-4px);
+}
+
+.pricing__plan--popular {
+  border-color: var(--jb-accent-light, #2d6aa0);
+  box-shadow: 0 0 30px rgba(30, 90, 150, 0.2), 0 0 60px rgba(30, 90, 150, 0.06);
+}
+
+.pricing__plan-popular-tag {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--jb-accent) 0%, var(--jb-accent-light, #2d6aa0) 100%);
+  color: #fff;
+  font-size: var(--jb-text-xs);
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: var(--jb-radius-full);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pricing__plan-name {
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-lg);
+  font-weight: 700;
+  color: var(--jb-text-primary);
+  margin-bottom: var(--jb-space-2);
+}
+
+.pricing__plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: var(--jb-space-1);
+}
+
+.pricing__plan-amount {
+  font-family: var(--jb-font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--jb-text-primary);
+}
+
+.pricing__plan-period {
+  color: var(--jb-text-muted);
+  font-size: var(--jb-text-sm);
+}
+
+.pricing__plan-desc {
+  color: var(--jb-text-secondary);
+  font-size: var(--jb-text-sm);
+  margin-bottom: var(--jb-space-5);
+  line-height: var(--jb-leading-relaxed);
+}
+
+.pricing__plan-trial {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--jb-success);
+  font-size: var(--jb-text-xs);
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--jb-radius-full);
+  margin-bottom: var(--jb-space-4);
+}
+
+.pricing__plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-3);
+  margin-bottom: var(--jb-space-6);
+  flex: 1;
+}
+
+.pricing__plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--jb-space-2);
+  font-size: var(--jb-text-sm);
+  color: var(--jb-text-secondary);
+  line-height: 1.5;
+}
+
+.pricing__plan-features li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pricing__plan-current-badge {
+  display: inline-block;
+  background: rgba(45, 106, 160, 0.15);
+  color: var(--jb-accent-light, #2d6aa0);
+  font-size: var(--jb-text-xs);
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--jb-radius-full);
+  margin-bottom: var(--jb-space-4);
+}
+
+/* ── PAYG Section ── */
+.pricing__payg {
+  border-radius: var(--jb-radius-lg);
+  padding: var(--jb-space-8);
+}
+
+.pricing__payg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--jb-space-6);
+  flex-wrap: wrap;
+  gap: var(--jb-space-4);
+}
+
+.pricing__payg-title {
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-xl);
+  font-weight: 700;
+  color: var(--jb-text-primary);
+}
+
+.pricing__payg-sub {
+  color: var(--jb-text-secondary);
+  font-size: var(--jb-text-sm);
+  margin-top: var(--jb-space-1);
+}
+
+/* PAYG Toggle Switch */
+.pricing__payg-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-3);
+}
+
+.pricing__payg-toggle-label {
+  font-size: var(--jb-text-sm);
+  color: var(--jb-text-secondary);
+  font-weight: 500;
+}
+
+.pricing__payg-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--jb-bg-deep);
+  border: 1px solid var(--jb-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pricing__payg-switch--active {
+  background: var(--jb-accent);
+  border-color: var(--jb-accent-light, #2d6aa0);
+  box-shadow: 0 0 12px rgba(30, 90, 150, 0.3);
+}
+
+.pricing__payg-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pricing__payg-switch--active .pricing__payg-switch-knob {
+  transform: translateX(22px);
+}
+
+/* PAYG Steps */
+.pricing__payg-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jb-space-4);
+  margin-bottom: var(--jb-space-6);
+}
+
+.pricing__payg-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--jb-radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pricing__payg-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--jb-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--jb-text-sm);
+  font-weight: 700;
+}
+
+.pricing__payg-step-title {
+  font-size: var(--jb-text-sm);
+  font-weight: 600;
+  color: var(--jb-text-primary);
+}
+
+.pricing__payg-step-desc {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-muted);
+  line-height: 1.5;
+}
+
+/* PAYG Usage Meter */
+.pricing__payg-meter {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--jb-border);
+  border-radius: var(--jb-radius-md);
+  padding: var(--jb-space-5);
+  margin-bottom: var(--jb-space-6);
+}
+
+.pricing__payg-meter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--jb-space-3);
+}
+
+.pricing__payg-meter-label {
+  font-size: var(--jb-text-sm);
+  color: var(--jb-text-secondary);
+}
+
+.pricing__payg-meter-amount {
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-lg);
+  font-weight: 700;
+  color: var(--jb-text-primary);
+}
+
+.pricing__payg-meter-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--jb-bg-deep);
+  overflow: hidden;
+}
+
+.pricing__payg-meter-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--jb-accent), var(--jb-accent-light, #2d6aa0));
+  transition: width 0.5s ease;
+}
+
+.pricing__payg-meter-threshold {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-muted);
+  margin-top: var(--jb-space-2);
+  text-align: right;
+}
+
+/* PAYG Rates Table */
+.pricing__payg-rates {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jb-space-3);
+}
+
+.pricing__payg-rate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--jb-space-1);
+  padding: var(--jb-space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--jb-radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.pricing__payg-rate-action {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pricing__payg-rate-price {
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-xl);
+  font-weight: 700;
+  color: var(--jb-text-primary);
+}
+
+.pricing__payg-rate-unit {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-secondary);
+}
+
+/* ── Comparison Table ── */
+.pricing__compare {
+  overflow-x: auto;
+}
+
+.pricing__compare-title {
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-xl);
+  font-weight: 700;
+  color: var(--jb-text-primary);
+  margin-bottom: var(--jb-space-5);
+  text-align: center;
+}
+
+.pricing__compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--jb-text-sm);
+}
+
+.pricing__compare-table th,
+.pricing__compare-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pricing__compare-table th {
+  font-weight: 600;
+  color: var(--jb-text-secondary);
+  font-size: var(--jb-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pricing__compare-table th:first-child,
+.pricing__compare-table td:first-child {
+  text-align: left;
+  color: var(--jb-text-primary);
+  font-weight: 500;
+}
+
+.pricing__compare-table td {
+  color: var(--jb-text-secondary);
+}
+
+.pricing__compare-check {
+  color: var(--jb-success);
+}
+
+.pricing__compare-cross {
+  color: var(--jb-text-muted);
+  opacity: 0.4;
+}
+
+.pricing__compare-limit {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-muted);
+}
+
+/* ── FAQ ── */
+.pricing__faq {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.pricing__faq-title {
+  font-family: var(--jb-font-display);
+  font-size: var(--jb-text-xl);
+  font-weight: 700;
+  color: var(--jb-text-primary);
+  margin-bottom: var(--jb-space-5);
+  text-align: center;
+}
+
+.pricing__faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding: var(--jb-space-4) 0;
+}
+
+.pricing__faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  gap: var(--jb-space-3);
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: var(--jb-text-sm);
+  font-weight: 600;
+  color: var(--jb-text-primary);
+  padding: 0;
+}
+
+.pricing__faq-q svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  color: var(--jb-text-muted);
+}
+
+.pricing__faq-q--open svg {
+  transform: rotate(180deg);
+}
+
+.pricing__faq-a {
+  color: var(--jb-text-secondary);
+  font-size: var(--jb-text-sm);
+  line-height: var(--jb-leading-relaxed);
+  margin-top: var(--jb-space-3);
+  padding-right: var(--jb-space-6);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .pricing__plans {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .pricing__payg-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing__payg-rates {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing__payg-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing__hero-title {
+    font-size: 1.5rem;
+  }
+
+  .pricing__plan {
+    padding: var(--jb-space-5);
+  }
+
+  .pricing__plan-amount {
+    font-size: 2rem;
+  }
+
+  .pricing__payg {
+    padding: var(--jb-space-5);
+  }
+}

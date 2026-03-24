@@ -1,0 +1,310 @@
+.hub {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-5);
+}
+
+.hub__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--jb-space-4);
+}
+
+/* Step indicators */
+.hub__steps {
+  display: flex;
+  gap: var(--jb-space-1);
+  align-items: center;
+}
+
+.hub__step {
+  font-size: var(--jb-text-xs);
+  padding: var(--jb-space-1) var(--jb-space-3);
+  border-radius: 999px;
+  background: var(--jb-bg-surface);
+  color: var(--jb-text-muted);
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.hub__step--active {
+  background: var(--jb-accent);
+  color: #fff;
+  font-weight: var(--jb-weight-semibold);
+}
+
+.hub__step--done {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--jb-success);
+}
+
+.hub__status {
+  padding: var(--jb-space-3) var(--jb-space-4);
+}
+
+.hub__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-4);
+}
+
+.hub__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-4);
+}
+
+/* Aggregation status */
+.hub__agg-status {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-2);
+  margin-top: var(--jb-space-1);
+}
+
+/* ── Guidance block ── */
+.hub__guidance {
+  border: 1px solid var(--jb-border-accent);
+}
+
+.hub__guidance-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--jb-space-3);
+}
+
+.hub__guidance-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--jb-space-2);
+  padding: var(--jb-space-5) var(--jb-space-4);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hub__guidance-option:hover {
+  border-color: var(--jb-accent);
+}
+
+/* ── Upload zone ── */
+.hub__upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--jb-space-3);
+  padding: var(--jb-space-10) var(--jb-space-6);
+  text-align: center;
+  cursor: pointer;
+  border: 2px dashed var(--jb-border);
+  border-radius: var(--jb-radius-lg);
+  transition: all 0.25s ease;
+}
+
+.hub__upload-zone:hover {
+  border-color: var(--jb-accent);
+  background: var(--jb-accent-glow);
+}
+
+.hub__upload-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--jb-space-3);
+}
+
+/* ── 15D dimension display ── */
+.hub__dims-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--jb-space-2);
+  margin-bottom: var(--jb-space-3);
+}
+
+.hub__dim {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hub__dim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hub__dim-label {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-secondary);
+}
+
+.hub__dim-value {
+  font-size: var(--jb-text-xs);
+  color: var(--jb-text-primary);
+}
+
+.hub__dim-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--jb-bg-surface);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hub__dim-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+
+/* ── Jobs grid ── */
+.hub__inline {
+  display: flex;
+  gap: var(--jb-space-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hub__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--jb-space-3);
+}
+
+.hub__badges {
+  display: flex;
+  gap: var(--jb-space-1);
+  flex-wrap: wrap;
+}
+
+.hub__jobs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--jb-space-3);
+}
+
+.hub__jobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--jb-space-3);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.hub__job {
+  text-align: left;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-1);
+  padding: var(--jb-space-3) var(--jb-space-4);
+  transition: all 0.2s ease;
+}
+
+.hub__job:hover {
+  transform: translateY(-1px);
+}
+
+.hub__job-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--jb-space-2);
+}
+
+/* ── Results ── */
+.hub__result-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-2);
+}
+
+.hub__result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--jb-space-3);
+}
+
+/* ── Document Picker & Custom Fields ── */
+.hub__doc-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--jb-border, rgba(148, 163, 184, 0.1));
+  border-radius: 10px;
+  color: var(--jb-text-secondary, #94a3b8);
+  font-size: var(--jb-text-sm, 0.875rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.hub__doc-toggle:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: var(--jb-accent, #2d6aa0);
+}
+
+.hub__doc-vault {
+  border: 1px solid var(--jb-border, rgba(148, 163, 184, 0.08));
+  border-radius: 10px;
+  padding: var(--jb-space-3, 12px);
+  background: rgba(15, 23, 42, 0.4);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+/* ── Apply CTA ── */
+.hub__apply-cta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--jb-space-3, 12px);
+  margin-top: var(--jb-space-4, 16px);
+  padding-top: var(--jb-space-4, 16px);
+  border-top: 1px solid var(--jb-border, rgba(148, 163, 184, 0.08));
+}
+
+.hub__apply-btn {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--jb-text-base, 1rem);
+  padding: 12px 28px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 980px) {
+  .hub__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hub__jobs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hub__guidance-options {
+    grid-template-columns: 1fr;
+  }
+
+  .hub__steps {
+    flex-wrap: wrap;
+  }
+
+  .hub__apply-cta {
+    flex-direction: column;
+  }
+  .hub__apply-cta .btn {
+    width: 100%;
+  }
+}

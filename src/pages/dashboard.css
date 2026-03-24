@@ -1,0 +1,313 @@
+/* ============================================
+   DASHBOARD -- Enhanced with gamification
+   ============================================ */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jb-space-8);
+}
+
+/* ── Hero ── */
+.dash-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--jb-space-6);
+}
+
+.dash-hero__left { flex: 1; }
+
+.dash-hero__greeting {
+  font-size: var(--jb-text-4xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.dash-hero__subtitle {
+  margin-top: var(--jb-space-2);
+  font-size: var(--jb-text-base);
+}
+
+.dash-hero__xp {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-4);
+  margin-top: var(--jb-space-5);
+}
+
+.dash-hero__level {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-3);
+  flex-shrink: 0;
+}
+
+.dash-hero__xp-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-hero__xp-label {
+  font-size: var(--jb-text-sm);
+  font-weight: var(--jb-weight-semibold);
+  color: var(--jb-text-primary);
+}
+
+.dash-hero__xp-detail {
+  font-size: var(--jb-text-xs);
+}
+
+.dash-hero__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--jb-space-3);
+}
+
+.dash-hero__streak {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-4);
+  padding: var(--jb-space-4) var(--jb-space-5) !important;
+  min-width: 180px;
+}
+
+.dash-hero__status {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-2);
+}
+
+/* ── Stats Grid ── */
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jb-space-4);
+}
+
+.dash-stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-4);
+  padding: var(--jb-space-5);
+  cursor: default;
+}
+
+.dash-stat-card__ring {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash-stat-card__ring .progress-ring {
+  position: absolute;
+  inset: 0;
+}
+
+.dash-stat-card__ring-value {
+  position: relative;
+  z-index: 1;
+  font-family: var(--jb-font-display);
+  font-weight: var(--jb-weight-bold);
+  color: var(--jb-text-primary);
+}
+
+/* ── Module Cards ── */
+.dash-modules__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jb-space-4);
+}
+
+.dash-module-card {
+  display: flex;
+  align-items: center;
+  gap: var(--jb-space-4);
+  padding: var(--jb-space-5) var(--jb-space-6);
+  cursor: pointer;
+  text-align: left;
+  border: 1px solid var(--jb-glass-border);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--jb-transition-fast), box-shadow var(--jb-transition-fast);
+}
+
+.dash-module-card__icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.dash-module-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.dash-module-card__label {
+  font-size: var(--jb-text-base);
+  font-weight: var(--jb-weight-semibold);
+  color: var(--jb-text-primary);
+}
+
+.dash-module-card__desc {
+  font-size: var(--jb-text-xs);
+}
+
+.dash-module-card__arrow {
+  font-size: var(--jb-text-xl);
+  color: var(--jb-text-muted);
+  transition: color var(--jb-transition-fast), transform var(--jb-transition-fast);
+  flex-shrink: 0;
+}
+
+.dash-module-card:hover .dash-module-card__arrow {
+  color: var(--jb-accent);
+  transform: translateX(4px);
+}
+
+/* ── Recent Applications ── */
+.dash-recent__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-recent__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--jb-space-3) 0;
+  border-bottom: 1px solid var(--jb-border);
+}
+
+.dash-recent__item:last-child {
+  border-bottom: none;
+}
+
+.dash-recent__item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-recent__item-company {
+  font-size: var(--jb-text-sm);
+  font-weight: var(--jb-weight-semibold);
+  color: var(--jb-text-primary);
+}
+
+.dash-recent__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--jb-space-3);
+  padding: var(--jb-space-8) 0;
+}
+
+/* ── Motivational Tip ── */
+.dash-tip__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-left: 3px solid var(--jb-accent, #3b82f6);
+}
+
+.dash-tip__text {
+  font-size: var(--jb-text-sm, 0.875rem);
+  color: var(--jb-text-secondary, #94a3b8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Badges / Achievements ── */
+.dash-badges__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--jb-space-3, 12px);
+}
+
+.dash-badges__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.dash-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+  min-height: 72px;
+  justify-content: center;
+}
+
+.dash-badge__icon {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.dash-badge--earned .dash-badge__icon {
+  animation: badge-bounce 0.5s ease;
+}
+
+.dash-badge--locked {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+}
+
+.dash-badge--earned {
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.dash-badge__label {
+  font-size: var(--jb-text-xs, 0.75rem);
+  font-weight: 600;
+  color: var(--jb-text-secondary, #94a3b8);
+}
+
+.dash-badge--earned .dash-badge__label {
+  color: var(--jb-text-primary, #f1f5f9);
+}
+
+@keyframes badge-bounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.dash-badges__next {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(59, 130, 246, 0.06);
+  border-radius: var(--jb-radius-md, 8px);
+  border: 1px dashed rgba(59, 130, 246, 0.2);
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .dash-stats { grid-template-columns: repeat(2, 1fr); }
+  .dash-modules__grid { grid-template-columns: repeat(2, 1fr); }
+  .dash-hero { flex-direction: column; }
+  .dash-badges__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .dash-stats { grid-template-columns: 1fr; }
+  .dash-modules__grid { grid-template-columns: 1fr; }
+  .dash-hero__greeting { font-size: var(--jb-text-2xl); }
+  .dash-hero__streak { min-width: auto; }
+  .dash-badges__grid { grid-template-columns: repeat(2, 1fr); }
+}
