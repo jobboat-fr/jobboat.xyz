@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
-const RAILWAY_BACKEND = 'https://jobboatv1-production-cb89.up.railway.app';
+const RAILWAY_BACKEND = 'https://api.jobboat.xyz';
 
 export default function AuthCallback() {
   const [params] = useSearchParams();
