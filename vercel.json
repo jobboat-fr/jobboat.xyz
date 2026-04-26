@@ -4,12 +4,32 @@
             "source": "/(.*)",
             "headers": [
                 {
+                    "key": "X-Content-Type-Options",
+                    "value": "nosniff"
+                },
+                {
+                    "key": "X-Frame-Options",
+                    "value": "SAMEORIGIN"
+                },
+                {
+                    "key": "Referrer-Policy",
+                    "value": "strict-origin-when-cross-origin"
+                },
+                {
+                    "key": "Strict-Transport-Security",
+                    "value": "max-age=31536000; includeSubDomains; preload"
+                },
+                {
                     "key": "Permissions-Policy",
                     "value": "camera=*, microphone=*, autoplay=*, display-capture=*"
                 },
                 {
                     "key": "Cross-Origin-Opener-Policy",
                     "value": "same-origin-allow-popups"
+                },
+                {
+                    "key": "Content-Security-Policy",
+                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://vercel.live https://auth.web3auth.io https://*.web3auth.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://vercel.live; img-src 'self' data: https: blob:; connect-src 'self' https://api.jobboat.xyz https://*.jobboat.xyz https://jobboatv1-production-cb89.up.railway.app https://*.railway.app https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.sendgrid.com https://*.apilayer.com https://*.googleapis.com https://api.elevenlabs.io https://api.d-id.com https://api.tavus.io https://api.bey.dev https://bey.chat https://*.bey.chat wss://*.livekit.cloud https://*.livekit.cloud https://auth.web3auth.io https://*.web3auth.io https://cdn.segment.com https://*.segment.com https://*.segment.io https://vercel.live; frame-src 'self' https://js.stripe.com https://*.daily.co https://*.tavus.io https://*.livekit.cloud https://bey.chat https://*.bey.chat https://*.bey.dev https://auth.web3auth.io https://*.web3auth.io https://vercel.live; media-src 'self' https://*.d-id.com https://*.railway.app https://api.jobboat.xyz blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
                 }
             ]
         }

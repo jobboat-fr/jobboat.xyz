@@ -72,7 +72,39 @@
     <h2>7. S&eacute;curit&eacute;</h2>
     <p>Communications chiffr&eacute;es HTTPS/TLS. Donn&eacute;es sensibles chiffr&eacute;es au repos.</p>
 
-    <h2>8. Contact</h2>
+    <h2>8. Application mobile (iOS et Android)</h2>
+    <p>Les sections pr&eacute;c&eacute;dentes s'appliquent &agrave; l'application mobile JobBoat (iOS et Android). Cette section pr&eacute;cise les sp&eacute;cificit&eacute;s mobiles requises par App Store Connect et Google Play.</p>
+
+    <h3 style="margin-top:1.2rem;font-size:1rem;color:#030711">8.1 Connexion</h3>
+    <ul>
+      <li><strong>Sign in with Apple</strong> et <strong>Connexion Google</strong> : nous recevons uniquement votre email et votre nom (si vous l'autorisez). Aucun autre identifiant Apple/Google n'est partag&eacute;.</li>
+      <li><strong>Authentification biom&eacute;trique</strong> (Face ID / Touch ID / empreinte Android) : la v&eacute;rification est effectu&eacute;e enti&egrave;rement sur l'appareil ; aucun mod&egrave;le biom&eacute;trique ne quitte votre t&eacute;l&eacute;phone.</li>
+    </ul>
+
+    <h3 style="margin-top:1rem;font-size:1rem;color:#030711">8.2 Permissions appareil et raisons</h3>
+    <ul>
+      <li><strong>Cam&eacute;ra</strong> : photo de profil, num&eacute;risation de CV (sur demande).</li>
+      <li><strong>Photothèque</strong> : import de photo de profil, import de CV depuis vos fichiers (sur demande).</li>
+      <li><strong>Microphone</strong> : coaching vocal et dict&eacute;e de CV (sur demande, vos enregistrements ne sont pas stock&eacute;s, seul le texte transcrit est conserv&eacute;).</li>
+      <li><strong>Notifications push</strong> : alertes candidatures, sessions de coaching. Activables/d&eacute;sactivables dans les R&eacute;glages syst&egrave;me.</li>
+      <li><strong>Capteurs de mouvement</strong> : effets visuels d'interface (parallaxe). Aucune donn&eacute;e n'est transmise.</li>
+      <li><strong>Stockage s&eacute;curis&eacute;</strong> (Keychain iOS, Keystore Android) : stockage chiffr&eacute; de votre jeton de session uniquement.</li>
+    </ul>
+
+    <h3 style="margin-top:1rem;font-size:1rem;color:#030711">8.3 Paiements et abonnements</h3>
+    <p>Les abonnements payants sont g&eacute;r&eacute;s par <strong>RevenueCat</strong> via les m&eacute;canismes natifs Apple In-App Purchase et Google Play Billing. Nous ne voyons jamais votre num&eacute;ro de carte ; RevenueCat nous transmet uniquement le statut d'abonnement (actif, expir&eacute;, annul&eacute;) et un identifiant utilisateur anonyme.</p>
+
+    <h3 style="margin-top:1rem;font-size:1rem;color:#030711">8.4 Identifiants techniques</h3>
+    <ul>
+      <li><strong>Token APNs</strong> (iOS) ou <strong>FCM</strong> (Android) : envoy&eacute; uniquement pour les notifications push, supprim&eacute; en cas de d&eacute;sinscription.</li>
+      <li><strong>Identifiant d'installation Expo</strong> : anonyme, utilis&eacute; uniquement pour le diagnostic technique en cas de plantage.</li>
+      <li><strong>Pas d'IDFA</strong> (publicit&eacute;) : l'application n'utilise pas l'identifiant publicitaire et ne d&eacute;clenche pas de bannière App Tracking Transparency.</li>
+    </ul>
+
+    <h3 style="margin-top:1rem;font-size:1rem;color:#030711">8.5 Suppression du compte mobile</h3>
+    <p>Conform&eacute;ment aux exigences d'App Store et Google Play, la suppression de compte est accessible directement dans l'application : <em>R&eacute;glages &rarr; Supprimer mon compte</em>. Cette action supprime imm&eacute;diatement vos donn&eacute;es de profil, vos candidatures et r&eacute;voque vos jetons d'authentification.</p>
+
+    <h2>9. Contact</h2>
     <ul>
       <li>Email : <a href="mailto:rached.azer@azzcolabs.business">rached.azer@azzcolabs.business</a></li>
       <li>Soci&eacute;t&eacute; : AZZ&amp;CO LABS SAS</li>

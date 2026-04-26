@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getApiBase } from '../services/apiClient';
 import './admin.css';
-
-// Admin credentials should be provided via environment variables
-// These should match the ADMIN_BYPASS_TOKEN on the backend
-const ADMIN_USERNAME = (import.meta.env.VITE_ADMIN_USERNAME || '').trim();
-const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD || '').trim();
-const ADMIN_BYPASS = (import.meta.env.VITE_ADMIN_BYPASS_TOKEN || '').trim();
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -15,30 +10,35 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Security check: warn if credentials are not configured via environment
-  if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
-    console.error('[SECURITY] Admin credentials not configured. Set VITE_ADMIN_USERNAME and VITE_ADMIN_PASSWORD environment variables.');
-  }
-
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    setTimeout(() => {
-      const usernameOk = ADMIN_USERNAME ? username === ADMIN_USERNAME : username.length > 0;
-      const passwordOk = (ADMIN_PASSWORD && password === ADMIN_PASSWORD) || (ADMIN_BYPASS && password === ADMIN_BYPASS);
-      if (usernameOk && passwordOk) {
-        const token = btoa(`${ADMIN_USERNAME}:${ADMIN_PASSWORD}`);
-        localStorage.setItem('admin_access_token', token);
+    // The password field IS the admin bypass token. We verify it against the
+    // backend (which compares timing-safe against ADMIN_BYPASS_TOKEN env var)
+    // by hitting a protected admin endpoint with x-admin-token header.
+    // No frontend env vars required.
+    const candidate = password.trim();
+    try {
+      const base = getApiBase();
+      const res = await fetch(`${base}/api/admin/dashboard`, {
+        method: 'GET',
+        headers: { 'x-admin-token': candidate },
+      });
+      if (res.ok) {
+        localStorage.setItem('admin_access_token', candidate);
         localStorage.setItem('admin_access_time', Date.now().toString());
+        localStorage.setItem('admin_user_label', username || 'admin');
         navigate('/admin');
       } else {
-        setError('Identifiants invalides. Acces refuse.');
+        setError('Identifiants invalides. Accès refusé.');
         setPassword('');
       }
-      setLoading(false);
-    }, 400);
+    } catch (err) {
+      setError('Erreur réseau. Vérifie ta connexion.');
+    }
+    setLoading(false);
   }
 
   return (

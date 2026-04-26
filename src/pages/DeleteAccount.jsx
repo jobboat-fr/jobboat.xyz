@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/apiClient';
+import ContactModal from '../components/ContactModal';
 import './delete-account.css';
+
+const SUPPORT_EMAIL = 'rached.azer@azzcolabs.business';
 
 export default function DeleteAccount() {
   const { user, logout } = useAuth();
@@ -10,6 +13,7 @@ export default function DeleteAccount() {
   const [confirmText, setConfirmText] = useState('');
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showContact, setShowContact] = useState(false);
 
   const canDelete = confirmText.trim().toUpperCase() === 'SUPPRIMER';
 
@@ -22,11 +26,15 @@ export default function DeleteAccount() {
     setLoading(true);
     setStatus(null);
     try {
-      await api.v2ComplianceDelete({ email: user.email });
+      const res = await api.v2ComplianceDelete({ email: user.email });
+      if (res && res.success === false) {
+        throw new Error(res.error || 'La suppression a echoue cote serveur.');
+      }
       await logout();
       navigate('/auth', { replace: true });
     } catch (err) {
-      setStatus({ type: 'error', message: err.message || 'Impossible de supprimer le compte.' });
+      console.error('[DeleteAccount] delete failed:', err);
+      setStatus({ type: 'error', message: err?.message || 'Impossible de supprimer le compte. Contactez le support.' });
     } finally {
       setLoading(false);
     }
@@ -96,10 +104,20 @@ export default function DeleteAccount() {
 
       <div className="glass-card delete-account__card">
         <h3 className="font-display">Besoin d'aide ?</h3>
-        <p className="text-muted">
-          Ecrivez a <a href="mailto:privacy@jobboat.xyz">privacy@jobboat.xyz</a> si vous ne pouvez pas acceder a votre compte.
+        <p className="text-muted" style={{ marginBottom: 12 }}>
+          Si vous ne pouvez pas acceder a votre compte ou avez une question RGPD, contactez le support.
         </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <button className="btn btn--primary btn--sm" onClick={() => setShowContact(true)}>
+            Contacter le support
+          </button>
+          <a className="btn btn--ghost btn--sm" href={`mailto:${SUPPORT_EMAIL}?subject=Demande%20RGPD`}>
+            Ou envoyer un email
+          </a>
+        </div>
       </div>
+
+      {showContact && <ContactModal onClose={() => setShowContact(false)} />}
     </div>
   );
 }

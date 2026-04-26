@@ -401,6 +401,10 @@ export default function Landing() {
           <a href="/auto-apply" onClick={(e) => { e.preventDefault(); navigate('/auto-apply'); }}>Candidature Automatique</a>
           <a href="/pricing" onClick={(e) => { e.preventDefault(); navigate('/pricing'); }}>Tarifs et Abonnements</a>
           <a href="/auth" onClick={(e) => { e.preventDefault(); navigate('/auth'); }}>Inscription Gratuite</a>
+          <a href="https://chromewebstore.google.com/detail/jobboat-auto-fill/PLACEHOLDER_EXTENSION_ID" target="_blank" rel="noopener noreferrer" className="landing__footer-extension">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: 4 }}><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Extension Chrome
+          </a>
         </nav>
         <nav className="landing__footer-links" aria-label="Liens utiles" style={{ marginTop: 'var(--jb-space-2)', opacity: 0.7 }}>
           <a href="/auto-apply" onClick={(e) => { e.preventDefault(); navigate('/auto-apply'); }}>Offres d'emploi</a>

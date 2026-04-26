@@ -3,6 +3,14 @@
     "private": true,
     "version": "0.1.0",
     "type": "module",
+    "description": "JobBoat web — éditée par AZZ&CO LABS SAS.",
+    "author": {
+        "name": "AZZ&CO LABS SAS",
+        "email": "rached.azer@azzcolabs.business",
+        "url": "https://www.azzcolabs.business"
+    },
+    "homepage": "https://jobboat.xyz",
+    "license": "UNLICENSED",
     "scripts": {
         "dev": "vite",
         "build": "vite build",

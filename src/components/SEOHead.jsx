@@ -54,6 +54,11 @@ const ROUTE_SEO = {
     description: "Developpez votre marque personnelle avec l'IA. Generez du contenu professionnel, optimisez votre presence en ligne, attirez les recruteurs.",
     keywords: "personal branding, marque personnelle, visibilite professionnelle, marketing personnel, attirer recruteurs, presence en ligne",
   },
+  '/stats': {
+    title: "Statistiques publiques JobBoat — Precision mesuree en temps reel",
+    description: "Donnees publiques mises a jour en continu : taux de reussite de l'auto-remplissage JobBoat par plateforme (Indeed, LinkedIn, APEC, France Travail, Monster, Glassdoor, HelloWork, Welcome to the Jungle, Cadremploi). Aucun chiffre marketing, que du mesure.",
+    keywords: "statistiques JobBoat, precision auto-remplissage, taux reussite candidature, transparence JobBoat, donnees publiques, auto apply accuracy",
+  },
 };
 
 const OG_IMAGE = `${BASE_URL}/og-image.png`;

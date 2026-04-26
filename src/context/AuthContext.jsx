@@ -113,9 +113,30 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
+    // Handle session-expired events from apiClient: try to refresh, else sign out.
+    const onSessionExpired = async (_ev) => {
+      try {
+        const { data: refreshed } = await supabase.auth.refreshSession();
+        if (refreshed?.session?.user) {
+          // Refresh worked — apiClient will pick up the new token on next poll.
+          applySessionUser(refreshed.session.user);
+          return;
+        }
+      } catch (_e) { /* fall through to sign-out */ }
+      // No refresh possible — clear local state + force redirect to /auth.
+      try { await supabase.auth.signOut(); } catch (_e) { /* noop */ }
+      setUser(null);
+      setNeedsEmail(false);
+      if (typeof window !== 'undefined' && window.location.pathname !== '/auth' && window.location.pathname !== '/') {
+        window.location.replace('/auth?reason=session_expired');
+      }
+    };
+    window.addEventListener('jobboat:session-expired', onSessionExpired);
+
     return () => {
       active = false;
       data.subscription?.unsubscribe();
+      window.removeEventListener('jobboat:session-expired', onSessionExpired);
     };
   }, [applySessionUser]);
 
