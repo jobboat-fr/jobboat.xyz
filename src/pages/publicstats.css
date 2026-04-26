@@ -1,0 +1,195 @@
+.jb-stats-root {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top, #0f172a 0%, #020617 100%);
+  color: #e2e8f0;
+  padding: 48px 24px 80px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.jb-stats-header {
+  max-width: 920px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.jb-stats-home {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.jb-stats-home:hover { color: #3b82f6; }
+
+.jb-stats-header h1 {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, #60a5fa, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.jb-stats-subtitle {
+  font-size: 18px;
+  color: #cbd5e1;
+  margin: 0 0 8px;
+}
+
+.jb-stats-period {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.jb-stats-loading,
+.jb-stats-empty {
+  max-width: 680px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  text-align: center;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid #334155;
+  border-radius: 16px;
+}
+
+.jb-stats-cta {
+  display: inline-block;
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  color: #0b1220;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.jb-stats-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.35);
+}
+
+.jb-stats-hint {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* KPI Grid */
+.jb-stats-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto 48px;
+}
+
+.jb-stats-kpi {
+  padding: 24px 20px;
+  background: linear-gradient(135deg, rgba(30, 58, 95, 0.6), rgba(15, 23, 42, 0.8));
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.jb-stats-kpi-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #60a5fa;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.jb-stats-kpi-label {
+  font-size: 13px;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.jb-stats-kpi-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Table */
+.jb-stats-table-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.jb-stats-table-wrap h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: #e2e8f0;
+}
+
+.jb-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.jb-stats-table th,
+.jb-stats-table td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.jb-stats-table th {
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jb-stats-table tr:last-child td { border-bottom: none; }
+
+.jb-stats-table .jb-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.jb-stats-rate {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.jb-stats-rate.ok { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.jb-stats-rate.mid { background: rgba(250, 204, 21, 0.15); color: #facc15; }
+.jb-stats-rate.low { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+
+.jb-stats-footer {
+  max-width: 680px;
+  margin: 64px auto 0;
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.jb-stats-footer p { margin: 8px 0; }
+.jb-stats-footer a { color: #60a5fa; text-decoration: none; margin: 0 4px; }
+.jb-stats-footer a:hover { color: #93c5fd; }
+
+@media (max-width: 640px) {
+  .jb-stats-header h1 { font-size: 28px; }
+  .jb-stats-kpi-value { font-size: 28px; }
+  .jb-stats-table th,
+  .jb-stats-table td { padding: 8px 10px; font-size: 12px; }
+}

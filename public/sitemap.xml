@@ -50,6 +50,14 @@
     <priority>0.85</priority>
   </url>
 
+  <!-- Privacy -->
+  <url>
+    <loc>https://jobboat.xyz/privacy</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
   <!-- Auth / Sign Up -->
   <url>
     <loc>https://jobboat.xyz/auth</loc>

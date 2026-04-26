@@ -11,7 +11,9 @@ const SUBJECTS = [
 ];
 
 export default function ContactModal({ onClose }) {
-  const [form, setForm] = useState({ name: '', email: '', subject: SUBJECTS[0], message: '' });
+  // `website` is a honeypot. Real users never fill it (visually hidden);
+  // bots blindly fill every field and the backend rejects the submission.
+  const [form, setForm] = useState({ name: '', email: '', subject: SUBJECTS[0], message: '', website: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
@@ -27,17 +29,19 @@ export default function ContactModal({ onClose }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await api('/api/v2/contact', {
-        method: 'POST',
-        body: JSON.stringify(form),
-      });
-      if (res.success) {
+      // BUG FIX: `api` is an object, not a function. The previous
+      // `api('/api/v2/contact', {...})` call silently threw a TypeError
+      // (caught below), so no network request was ever made. Use the
+      // named helper instead.
+      const res = await api.v2Contact(form);
+      if (res && res.success) {
         setSuccess(res.ticketId);
       } else {
-        setError(res.error || 'Erreur lors de l\'envoi.');
+        setError((res && res.error) || 'Erreur lors de l\'envoi.');
       }
     } catch (err) {
-      setError('Impossible d\'envoyer le message. Réessaie plus tard.');
+      console.error('[ContactModal] send failed:', err);
+      setError(err?.message || 'Impossible d\'envoyer le message. Réessaie plus tard.');
     } finally {
       setLoading(false);
     }
@@ -113,6 +117,18 @@ export default function ContactModal({ onClose }) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {/* Honeypot field: hidden from real users, auto-filled by bots.
+                  The backend rejects submissions where this is non-empty. */}
+              <input
+                type="text"
+                name="website"
+                value={form.website}
+                onChange={e => set('website', e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0, pointerEvents: 'none' }}
+              />
               <div style={{ display: 'flex', gap: 12 }}>
                 <div style={{ flex: 1 }}>
                   <label style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 6 }}>

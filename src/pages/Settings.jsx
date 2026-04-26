@@ -12,6 +12,7 @@ import { supabase } from '../lib/supabase';
 import { api } from '../services/apiClient';
 import { loadStripe } from '@stripe/stripe-js';
 import ReferralCard from '../components/ReferralCard';
+import ContactModal from '../components/ContactModal';
 import './settings.css';
 
 const stripePromise = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
@@ -103,6 +104,7 @@ export default function Settings() {
   const [searchParams] = useSearchParams();
   const fileRef = useRef(null);
   const [activeTab, setActiveTab] = useState('profile');
+  const [showContact, setShowContact] = useState(false);
 
   // Profile state
   const [loading, setLoading] = useState(true);
@@ -391,6 +393,37 @@ export default function Settings() {
 
   function handleDeleteAccount() {
     navigate('/delete-account');
+  }
+
+  const [exporting, setExporting] = useState(false);
+  async function handleExportData() {
+    if (!email) {
+      flash('error', 'Connectez-vous pour exporter vos donnees.');
+      return;
+    }
+    setExporting(true);
+    try {
+      const res = await api.v2ComplianceExport(email);
+      if (!res || res.success === false) {
+        throw new Error(res?.error || 'Export impossible.');
+      }
+      // Download the JSON as a file (GDPR Art. 15: portable, machine-readable)
+      const blob = new Blob([JSON.stringify(res.export || res, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `jobboat-export-${email.replace(/[^a-z0-9]/gi, '_')}-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      flash('success', 'Export telecharge avec succes.');
+    } catch (err) {
+      console.error('[Settings] export failed:', err);
+      flash('error', err?.message || 'Export impossible. Contactez le support.');
+    } finally {
+      setExporting(false);
+    }
   }
 
   async function handleCancelSubscription() {
@@ -985,12 +1018,12 @@ export default function Settings() {
                   <span className="badge badge--accent">Supabase Auth</span>
                 </div>
                 <div>
-                  <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)' }}>Algorithmes</span>
-                  <span>572 modeles</span>
+                  <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)' }}>Patterns comportementaux</span>
+                  <span>572 patterns &middot; 58 ensembles</span>
                 </div>
                 <div>
-                  <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)' }}>Dimensions</span>
-                  <span>Scoring 15D</span>
+                  <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)' }}>Scoring candidat</span>
+                  <span>6 dimensions</span>
                 </div>
               </div>
             </div>
@@ -1001,8 +1034,8 @@ export default function Settings() {
                 Vos donnees sont protegees et traitees conformement au RGPD. Vous pouvez exporter ou supprimer vos donnees a tout moment.
               </p>
               <div className="settings__actions" style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
-                <button className="btn btn--secondary btn--sm" onClick={() => flash('info', 'Export des donnees en cours de developpement.')}>
-                  Exporter mes donnees
+                <button className="btn btn--secondary btn--sm" onClick={handleExportData} disabled={exporting}>
+                  {exporting ? 'Export en cours...' : 'Exporter mes donnees'}
                 </button>
                 <button className="btn btn--danger btn--sm" onClick={handleDeleteAccount}>
                   Supprimer mon compte
@@ -1016,7 +1049,7 @@ export default function Settings() {
                 <a href="https://www.azzcolabs.business" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
                   AZZ&CO LABS — Notre entreprise
                 </a>
-                <a href="https://jobboat.xyz/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
+                <a href="/privacy" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
                   Politique de confidentialite
                 </a>
                 <a href="https://www.azzcolabs.business/terms.html" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
@@ -1024,6 +1057,21 @@ export default function Settings() {
                 </a>
                 <a href="https://www.azzco.life" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
                   LONGTERM Standpoint — AFTER-GAP
+                </a>
+              </div>
+            </div>
+
+            <div className="glass-card settings__section">
+              <h3 className="font-display settings__section-title">Support</h3>
+              <p className="text-muted" style={{ fontSize: 'var(--jb-text-sm)', marginBottom: 12 }}>
+                Une question, un bug, ou besoin d'aide ? Notre equipe repond sous 24h (lun-ven).
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <button className="btn btn--primary btn--sm" onClick={() => setShowContact(true)}>
+                  Contacter le support
+                </button>
+                <a className="btn btn--ghost btn--sm" href="mailto:rached.azer@azzcolabs.business">
+                  Email direct
                 </a>
               </div>
             </div>
@@ -1040,6 +1088,8 @@ export default function Settings() {
           </div>
         )}
       </div>
+
+      {showContact && <ContactModal onClose={() => setShowContact(false)} />}
     </div>
   );
 }

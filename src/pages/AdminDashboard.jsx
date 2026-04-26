@@ -141,6 +141,7 @@ export default function AdminDashboard() {
         <div className="admin-actions-row">
           <button className="btn btn--primary" onClick={() => navigate('/admin/api-keys')}>Gérer les clés API</button>
           <button className="btn btn--secondary" onClick={() => navigate('/admin/logs')}>Consulter les journaux</button>
+          <button className="btn btn--secondary" onClick={() => navigate('/admin/recruiter')}>Recruteur (Matching)</button>
         </div>
       </div>
     );

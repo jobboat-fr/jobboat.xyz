@@ -315,10 +315,25 @@ export default function CvBuilder() {
     );
   }
 
-  const [cvMode, setCvMode] = useState('editor'); // 'editor' | 'chat' | 'oracle'
+  // 'chat' = Claude text chat (default). 'oracle' = Claude + voice.
+  // The legacy form-fill editor was removed — Claude builds the CV conversationally.
+  const [cvMode, setCvMode] = useState('chat');
   const [chatMessages, setChatMessages] = useState([]);
   const [chatLoading, setChatLoading] = useState(false);
   const cvChatHistoryRef = useRef([]);
+
+  // Auto-initialize chat when user lands on editor step (so Claude greets them immediately)
+  useEffect(() => {
+    if (step === 'editor' && cvMode === 'chat' && chatMessages.length === 0) {
+      const init = {
+        role: 'assistant',
+        content: 'Bonjour ! Je suis Léo, ton expert CV propulsé par Claude. Pour commencer, dis-moi ton prénom et le poste que tu cibles.',
+        id: 'init',
+      };
+      setChatMessages([init]);
+      cvChatHistoryRef.current = [{ role: 'assistant', content: init.content }];
+    }
+  }, [step, cvMode, chatMessages.length]);
 
   // ── CV Oracle voice mode ──
   const [cvOracleMessages, setCvOracleMessages] = useState([]);
@@ -390,10 +405,7 @@ export default function CvBuilder() {
         conversation_history: cvOracleHistoryRef.current.slice(-8),
         cv_context: cv,
       });
-      if (!httpRes.ok) {
-        const errBody = await httpRes.json().catch(() => ({}));
-        throw new Error(errBody.error || `HTTP ${httpRes.status}`);
-      }
+      if (!httpRes.ok) throw new Error(`HTTP ${httpRes.status}`);
       const reader = httpRes.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '', fullText = '', sentenceBuf = '';
@@ -429,10 +441,7 @@ export default function CvBuilder() {
         }
       }
     } catch (err) {
-      const isProGate = err?.message?.includes('pro_required');
-      setCvOracleMessages(prev => prev.map(m => m.id === aiMsgId ? { ...m, content: isProGate
-        ? 'L\'assistant CV vocal est reserve aux abonnes Pro. Rendez-vous sur la page Tarifs pour passer au Pro.'
-        : `Erreur: ${err.message}`, streaming: false } : m));
+      setCvOracleMessages(prev => prev.map(m => m.id === aiMsgId ? { ...m, content: `Erreur: ${err.message}`, streaming: false } : m));
     } finally {
       setCvOracleLoading(false);
     }
@@ -485,14 +494,7 @@ export default function CvBuilder() {
         setCv(prev => ({ ...prev, ...res.field_updates }));
       }
     } catch (err) {
-      const isProGate = err?.message?.includes('pro_required');
-      setChatMessages(prev => [...prev, {
-        role: 'system',
-        content: isProGate
-          ? 'L\'assistant CV est reserve aux abonnes Pro, Growth ou Enterprise. Rendez-vous sur la page Tarifs pour passer au Pro.'
-          : `Erreur: ${err.message}`,
-        id: `s-${Date.now()}`
-      }]);
+      setChatMessages(prev => [...prev, { role: 'system', content: `Erreur: ${err.message}`, id: `s-${Date.now()}` }]);
     } finally {
       setChatLoading(false);
     }
@@ -612,9 +614,9 @@ export default function CvBuilder() {
       {/* ── Step: Choose ── */}
       {step === 'choose' && (
         <section className="cv-choose fade-in-up">
-          <h2 className="section-title">CV Builder</h2>
+          <h2 className="section-title">CV Builder propulsé par Claude</h2>
           <p className="section-subtitle" style={{ marginBottom: 'var(--jb-space-6)' }}>
-            Cree ou ameliore ton CV a travers les 15 dimensions d'evaluation. Parle a l'IA ou remplis le formulaire.
+            Claude construit ton CV avec toi, en chat ou à la voix. Pas de formulaire à remplir. On extrait automatiquement les infos et on optimise pour les 15 dimensions ATS.
           </p>
 
           <div className="cv-choose__options">
@@ -624,7 +626,7 @@ export default function CvBuilder() {
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
               </svg>
               <span className="font-display" style={{ fontWeight: 600 }}>Importer mon CV</span>
-              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', textAlign: 'center' }}>L'IA l'analyse, extrait les infos et te permet de l'editer</span>
+              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', textAlign: 'center' }}>Claude l'analyse, extrait les infos, et te propose des améliorations</span>
               {uploading && (
                 <div className="cv-upload-loading" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--jb-space-2)', marginTop: 8 }}>
                   <svg className="cv-spinner" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -635,23 +637,22 @@ export default function CvBuilder() {
               )}
             </div>
 
-            <div className="glass-card cv-choose__option hover-lift" onClick={() => setStep('editor')}>
+            <div className="glass-card cv-choose__option hover-lift" onClick={() => { setCvMode('chat'); setStep('editor'); }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
-              <span className="font-display" style={{ fontWeight: 600 }}>Creer de zero</span>
-              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', textAlign: 'center' }}>Remplis le formulaire ou dicte a l'IA par la voix</span>
+              <span className="font-display" style={{ fontWeight: 600 }}>Chat avec Claude</span>
+              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', textAlign: 'center' }}>Claude te pose les bonnes questions, tu tapes tes réponses, il construit ton CV</span>
             </div>
 
-            <div className="glass-card cv-choose__option hover-lift" onClick={() => setStep('editor')}>
+            <div className="glass-card cv-choose__option hover-lift" onClick={() => { setCvMode('oracle'); setStep('editor'); }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
                 <line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
               </svg>
-              <span className="font-display" style={{ fontWeight: 600 }}>Dicter a l'IA</span>
-              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', textAlign: 'center' }}>Parle, l'IA construit ton CV en temps reel</span>
+              <span className="font-display" style={{ fontWeight: 600 }}>Oracle CV (voix)</span>
+              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', textAlign: 'center' }}>Léo te parle, tu réponds à voix haute — ton CV s'écrit tout seul</span>
             </div>
           </div>
         </section>
@@ -670,27 +671,21 @@ export default function CvBuilder() {
             </div>
           </div>
 
-          {/* Mode toggle */}
+          {/* Mode toggle — form editor removed. Claude drives the CV. */}
           <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-            <button
-              className={cvMode === 'editor' ? 'btn btn--primary btn--sm' : 'btn btn--ghost btn--sm'}
-              onClick={() => setCvMode('editor')}
-            >
-              Editeur
-            </button>
             <button
               className={cvMode === 'chat' ? 'btn btn--primary btn--sm' : 'btn btn--ghost btn--sm'}
               onClick={() => {
                 setCvMode('chat');
                 cvOracleVoice.stop();
                 if (chatMessages.length === 0) {
-                  const init = { role: 'assistant', content: 'Bonjour ! Je suis ton assistant CV. Dis-moi ton prenom et le poste que tu cibles pour commencer.', id: 'init' };
+                  const init = { role: 'assistant', content: 'Bonjour ! Je suis Léo, ton expert CV propulsé par Claude. Pour commencer, dis-moi ton prénom et le poste que tu cibles.', id: 'init' };
                   setChatMessages([init]);
                   cvChatHistoryRef.current = [{ role: 'assistant', content: init.content }];
                 }
               }}
             >
-              Chat IA
+              💬 Chat CV
             </button>
             <button
               className={cvMode === 'oracle' ? 'btn btn--primary btn--sm' : 'btn btn--ghost btn--sm'}
@@ -704,7 +699,24 @@ export default function CvBuilder() {
                 setTimeout(() => cvOracleVoice.start(), 400);
               }}
             >
-              🎙 Oracle CV
+              🎙 Oracle CV (voix)
+            </button>
+          </div>
+
+          {/* Action bar — always visible so users can export/enrich whatever Claude built */}
+          <div className="cv-action-bar">
+            <button className="btn btn--ghost btn--sm" onClick={() => setStep('choose')}>Retour</button>
+            <button className="btn btn--secondary btn--sm" onClick={handleEnrich} disabled={enrichLoading}>
+              {enrichLoading ? 'Enrichissement...' : 'Enrichir mon CV'}
+            </button>
+            <button className="btn btn--secondary btn--sm" onClick={analyzeCv} disabled={sugLoading}>
+              {sugLoading ? 'Analyse...' : 'Analyser (15D)'}
+            </button>
+            <button className="btn btn--ghost btn--sm" onClick={handleShare} disabled={shareLoading}>
+              {shareLoading ? 'Partage...' : 'Lien web'}
+            </button>
+            <button className="btn btn--ghost btn--sm" onClick={handleExportPdf} disabled={exportLoading}>
+              {exportLoading ? 'Export...' : 'PDF'}
             </button>
           </div>
 
@@ -758,7 +770,8 @@ export default function CvBuilder() {
             </div>
           )}
 
-          {cvMode === 'editor' && (<>
+          {/* Legacy form editor — kept as dead code for rollback. Always false now. */}
+          {false && (<>
           <div className="cv-action-bar">
             <button className="btn btn--ghost btn--sm" onClick={() => setStep('choose')}>Retour</button>
             <button className="btn btn--secondary btn--sm" onClick={handleEnrich} disabled={enrichLoading}>

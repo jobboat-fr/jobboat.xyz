@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Politique de confidentialité de l'extension Chrome JobBoat Auto-Fill : données collectées, IA Anthropic Claude, télémétrie, vos droits RGPD.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Politique de confidentialité — JobBoat Auto-Fill (extension Chrome)</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --soft: #64748b;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --accent-bg: #eff6ff;
+      --warn: #b45309;
+      --warn-bg: #fef3c7;
+      --good: #047857;
+      --good-bg: #ecfdf5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #020617;
+        --card: #0f172a;
+        --text: #f1f5f9;
+        --muted: #cbd5e1;
+        --soft: #94a3b8;
+        --border: rgba(148,163,184,0.18);
+        --accent: #60a5fa;
+        --accent-bg: rgba(96,165,250,0.12);
+        --warn: #fbbf24;
+        --warn-bg: rgba(251,191,36,0.12);
+        --good: #34d399;
+        --good-bg: rgba(52,211,153,0.12);
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      padding: 32px 16px 80px;
+    }
+    .skip {
+      position: absolute; left: -9999px; top: 0;
+      background: var(--accent); color: #fff; padding: 8px 14px; border-radius: 0 0 6px 0;
+      z-index: 100;
+    }
+    .skip:focus { left: 0; }
+    .wrap { max-width: 800px; margin: 0 auto; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px clamp(20px, 4vw, 44px);
+      box-shadow: 0 4px 24px rgba(15,23,42,0.05);
+    }
+    header.hero {
+      display: flex; align-items: center; gap: 14px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .logo {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--accent);
+      color: #fff; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; font-size: 14px;
+    }
+    h1 {
+      font-size: clamp(1.4rem, 4vw, 1.7rem);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .meta { color: var(--soft); font-size: 0.85rem; margin-top: 4px; }
+    nav.toc {
+      background: var(--accent-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 0.9rem;
+    }
+    nav.toc strong { display: block; margin-bottom: 8px; color: var(--text); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    nav.toc ol { padding-left: 20px; }
+    nav.toc a { color: var(--accent); text-decoration: none; }
+    nav.toc a:hover, nav.toc a:focus { text-decoration: underline; }
+    h2 {
+      font-size: 1.15rem;
+      margin: 32px 0 10px;
+      color: var(--text);
+      letter-spacing: -0.005em;
+      scroll-margin-top: 24px;
+    }
+    h2 .num { color: var(--soft); font-weight: 500; margin-right: 6px; }
+    h3 { font-size: 0.95rem; margin: 18px 0 6px; color: var(--text); }
+    p, li { font-size: 0.94rem; color: var(--muted); margin-bottom: 8px; }
+    ul, ol { padding-left: 22px; margin: 8px 0 12px; }
+    li { margin-bottom: 6px; }
+    a { color: var(--accent); }
+    a:focus, button:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.85em; }
+    .badge {
+      display: inline-block; padding: 2px 9px;
+      border-radius: 999px; font-size: 0.72rem; font-weight: 600;
+      vertical-align: middle; margin-left: 6px;
+    }
+    .badge.good { background: var(--good-bg); color: var(--good); }
+    .badge.warn { background: var(--warn-bg); color: var(--warn); }
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    @media (min-width: 600px) {
+      .data-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .data-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--bg);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.88rem;
+    }
+    .data-item .k { color: var(--muted); }
+    footer.fin {
+      margin-top: 36px; padding-top: 22px;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem; color: var(--soft);
+      display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between;
+    }
+    footer.fin a { color: var(--soft); }
+    @media print {
+      body { background: #fff; padding: 0; color: #000; }
+      .card { box-shadow: none; border: none; padding: 0; }
+      nav.toc { background: none; border: 1px solid #ccc; }
+      a { color: #000 !important; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<div class="wrap">
+  <main id="main" class="card">
+
+    <header class="hero">
+      <div class="logo" aria-hidden="true">JB</div>
+      <div>
+        <h1>Politique de confidentialité — JobBoat Auto-Fill</h1>
+        <p class="meta">Extension Chrome v1.2.0 · Dernière mise à jour : 25 avril 2026 · Lecture : ≈ 5 min</p>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Table des matières">
+      <strong>Sommaire</strong>
+      <ol>
+        <li><a href="#editeur">Éditeur de l'extension</a></li>
+        <li><a href="#donnees">Données collectées</a></li>
+        <li><a href="#nondonnees">Données <em>non</em> collectées</a></li>
+        <li><a href="#ia">Détection IA &amp; sous-traitants</a></li>
+        <li><a href="#telemetrie">Télémétrie anonyme</a></li>
+        <li><a href="#stockage">Stockage et durée de conservation</a></li>
+        <li><a href="#permissions">Permissions Chrome</a></li>
+        <li><a href="#partage">Partage et transferts hors UE</a></li>
+        <li><a href="#droits">Vos droits (RGPD)</a></li>
+        <li><a href="#suppression">Suppression des données</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="editeur"><span class="num">1.</span>Éditeur de l'extension</h2>
+    <p>L'extension <strong>JobBoat Auto-Fill</strong> est éditée par&nbsp;:</p>
+    <ul>
+      <li><strong>AZZ&amp;CO LABS SAS</strong>, société par actions simplifiée au capital de 200&nbsp;€</li>
+      <li>RCS Versailles <strong>100&nbsp;667&nbsp;021</strong> — SIREN 100&nbsp;667&nbsp;021</li>
+      <li>Siège social&nbsp;: Bâtiment Fougères, Rue de Guyenne, 78840 Freneuse, France</li>
+      <li>Directeur de la publication&nbsp;: Rached AZER</li>
+      <li>Email du responsable de traitement&nbsp;: <a href="mailto:rached.azer@azzcolabs.business?subject=RGPD%20Extension">rached.azer@azzcolabs.business</a></li>
+    </ul>
+    <p>L'extension fonctionne en complément de la plateforme web <a href="https://jobboat.xyz">jobboat.xyz</a> et nécessite un compte JobBoat (gratuit) pour être utilisée.</p>
+
+    <h2 id="donnees"><span class="num">2.</span>Données collectées <span class="badge warn">PERSONNELLES</span></h2>
+    <p>L'extension accède aux catégories de données suivantes&nbsp;:</p>
+    <div class="data-grid">
+      <div class="data-item"><span class="k">Jeton d'authentification</span><span>Supabase JWT</span></div>
+      <div class="data-item"><span class="k">Email</span><span>profil JobBoat</span></div>
+      <div class="data-item"><span class="k">Nom &amp; prénom</span><span>profil JobBoat</span></div>
+      <div class="data-item"><span class="k">Téléphone</span><span>profil JobBoat</span></div>
+      <div class="data-item"><span class="k">Ville</span><span>profil JobBoat</span></div>
+      <div class="data-item"><span class="k">URL LinkedIn / portfolio</span><span>profil JobBoat</span></div>
+      <div class="data-item"><span class="k">Poste actuel, années d'expérience</span><span>profil JobBoat</span></div>
+      <div class="data-item"><span class="k">Prétention salariale, disponibilité</span><span>profil JobBoat</span></div>
+    </div>
+    <p>Le jeton d'authentification est lu depuis le <code>localStorage</code> de <a href="https://jobboat.xyz">jobboat.xyz</a> uniquement. Les autres champs sont récupérés via l'API JobBoat (<code>api.jobboat.xyz</code>) à l'aide de ce jeton.</p>
+
+    <h2 id="nondonnees"><span class="num">3.</span>Données <em>non</em> collectées <span class="badge good">JAMAIS</span></h2>
+    <p>L'extension ne collecte <strong>jamais</strong>&nbsp;:</p>
+    <ul>
+      <li>Votre historique de navigation ni les onglets ouverts</li>
+      <li>Le contenu des formulaires que vous saisissez manuellement</li>
+      <li>Les valeurs des champs de candidature après remplissage</li>
+      <li>Les mots de passe, données bancaires ou cookies tiers</li>
+      <li>Aucun outil d'analytics tiers (Google Analytics, Facebook Pixel, etc.)</li>
+      <li>Aucun identifiant publicitaire (IDFA, GAID)</li>
+    </ul>
+
+    <h2 id="ia"><span class="num">4.</span>Détection IA &amp; sous-traitants</h2>
+    <p>Lorsque la détection heuristique reconnaît moins de 3 champs sur un formulaire inhabituel, l'extension envoie une <strong>copie sérialisée et structurelle du DOM</strong> (libellés, attributs <code>name</code>, <code>id</code>, <code>placeholder</code>, <code>aria-label</code>, texte adjacent — <strong>jamais les valeurs saisies</strong>) à notre serveur, qui interroge à son tour <strong>Anthropic Claude 3.5 Haiku</strong> pour identifier le rôle de chaque champ.</p>
+    <ul>
+      <li><strong>Sous-traitant IA</strong>&nbsp;: Anthropic PBC, San Francisco, États-Unis. <a href="https://www.anthropic.com/legal/privacy">Politique de confidentialité Anthropic</a>.</li>
+      <li>Encadrement juridique&nbsp;: Clauses Contractuelles Types (CCT) de la Commission européenne pour les transferts hors UE.</li>
+      <li>Anthropic s'engage à ne pas utiliser les données API pour entraîner ses modèles.</li>
+      <li>La clé API Anthropic est stockée côté serveur uniquement&nbsp;: elle n'est <strong>jamais</strong> exposée au navigateur.</li>
+    </ul>
+
+    <h2 id="telemetrie"><span class="num">5.</span>Télémétrie anonyme</h2>
+    <p>Pour mesurer la qualité de la détection sur chaque portail, l'extension envoie après chaque tentative d'auto-remplissage&nbsp;:</p>
+    <ul>
+      <li>Le nom du portail (ex.&nbsp;<code>indeed.fr</code>) et le nom d'hôte</li>
+      <li>Le nombre de champs détectés et le nombre de champs remplis</li>
+      <li>La durée du traitement (ms) et la méthode utilisée (heuristique / adapter / IA)</li>
+      <li>Un éventuel message d'erreur technique</li>
+    </ul>
+    <p>Aucune valeur saisie, aucun identifiant utilisateur (sauf si vous êtes connecté), aucune URL complète. Les statistiques agrégées sont publiques sur <a href="https://jobboat.xyz/stats">jobboat.xyz/stats</a>.</p>
+
+    <h2 id="stockage"><span class="num">6.</span>Stockage et durée de conservation</h2>
+    <ul>
+      <li><strong>Cache local</strong> (<code>chrome.storage.local</code>)&nbsp;: profil mis en cache 10 minutes pour limiter les appels réseau, puis rafraîchi.</li>
+      <li><strong>Côté serveur JobBoat</strong>&nbsp;: événements de candidature conservés pendant la durée de votre compte, anonymisés après suppression de compte.</li>
+      <li><strong>Côté Anthropic</strong>&nbsp;: les requêtes API sont conservées 30 jours pour la prévention des abus, puis supprimées (politique Anthropic).</li>
+    </ul>
+
+    <h2 id="permissions"><span class="num">7.</span>Permissions Chrome demandées</h2>
+    <ul>
+      <li><strong>activeTab</strong>&nbsp;: lire les champs de formulaire de l'onglet actif lors d'un clic sur «&nbsp;Auto-Fill&nbsp;».</li>
+      <li><strong>storage</strong>&nbsp;: mettre en cache votre profil et vos préférences localement.</li>
+      <li><strong>scripting</strong>&nbsp;: injecter le détecteur de champs et lire la session Supabase depuis un onglet jobboat.xyz.</li>
+      <li><strong>tabs</strong>&nbsp;: localiser un onglet jobboat.xyz ouvert pour récupérer la session.</li>
+      <li><strong>host_permissions</strong> (9 portails d'emploi&nbsp;+ JobBoat)&nbsp;: détecter les formulaires et communiquer avec l'API.</li>
+    </ul>
+
+    <h2 id="partage"><span class="num">8.</span>Partage et transferts hors UE</h2>
+    <p>Aucune donnée n'est vendue, louée ou partagée à des fins publicitaires. Les seuls destinataires sont nos sous-traitants techniques&nbsp;:</p>
+    <ul>
+      <li><strong>Supabase Inc.</strong> (UE — Irlande)&nbsp;: hébergement de la base de données utilisateur</li>
+      <li><strong>Railway Corp.</strong> (États-Unis)&nbsp;: hébergement du backend, sous CCT</li>
+      <li><strong>Anthropic PBC</strong> (États-Unis)&nbsp;: détection IA des champs, sous CCT</li>
+      <li><strong>SendGrid / Twilio</strong> (États-Unis)&nbsp;: envoi des emails transactionnels, sous CCT</li>
+    </ul>
+
+    <h2 id="droits"><span class="num">9.</span>Vos droits (RGPD)</h2>
+    <p>En application des articles 15 à 22 du RGPD, vous disposez des droits suivants&nbsp;: accès, rectification, effacement, portabilité, opposition, limitation du traitement.</p>
+    <p>Pour les exercer&nbsp;:</p>
+    <ul>
+      <li>Depuis JobBoat&nbsp;: <strong>Réglages → Données et confidentialité → Exporter mes données</strong> (export JSON immédiat)</li>
+      <li>Pour la suppression de compte&nbsp;: <strong>Réglages → Données et confidentialité → Supprimer mon compte</strong> (effacement sous 30 jours)</li>
+      <li>Par email&nbsp;: <a href="mailto:rached.azer@azzcolabs.business?subject=RGPD%20Extension">rached.azer@azzcolabs.business</a> (réponse sous 30 jours)</li>
+    </ul>
+    <p>En cas de désaccord, vous pouvez saisir la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
+
+    <h2 id="suppression"><span class="num">10.</span>Suppression des données stockées par l'extension</h2>
+    <p>Vous pouvez à tout moment&nbsp;:</p>
+    <ul>
+      <li>Cliquer «&nbsp;Déconnexion&nbsp;» dans le popup&nbsp;: efface session + profil cachés.</li>
+      <li>Désinstaller l'extension&nbsp;: Chrome efface automatiquement <code>chrome.storage.local</code>.</li>
+    </ul>
+
+    <h2 id="contact"><span class="num">11.</span>Contact</h2>
+    <p>Pour toute question relative à la confidentialité ou pour exercer vos droits&nbsp;:</p>
+    <ul>
+      <li>Email&nbsp;: <a href="mailto:rached.azer@azzcolabs.business?subject=Question%20Confidentialit%C3%A9%20Extension">rached.azer@azzcolabs.business</a></li>
+      <li>Courrier&nbsp;: AZZ&amp;CO LABS SAS — Bâtiment Fougères, Rue de Guyenne, 78840 Freneuse, France</li>
+      <li>Page support&nbsp;: <a href="https://jobboat.xyz/legal">jobboat.xyz/legal</a></li>
+    </ul>
+
+    <footer class="fin">
+      <span>© 2026 AZZ&amp;CO LABS SAS — Tous droits réservés</span>
+      <span>
+        <a href="https://jobboat.xyz">jobboat.xyz</a> ·
+        <a href="https://jobboat.xyz/legal">Mentions légales &amp; CGU</a>
+      </span>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

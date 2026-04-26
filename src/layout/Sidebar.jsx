@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: '/mes-candidatures', label: 'Mes Candidatures', icon: MailIcon, badge: null },
   { to: '/cv-builder',label: 'CV Builder',         icon: DocIcon, badge: null },
   { to: '/profile',   label: 'Profil & KPIs',      icon: ChartIcon, badge: null },
+  { to: '/profil-carriere', label: 'Profil de carrière', icon: ChartIcon, badge: 'NEW' },
   { to: '/pricing',   label: 'Tarifs',             icon: TagIcon, badge: null },
   { to: '/settings',  label: 'Reglages',           icon: GearIcon, badge: null },
 ];

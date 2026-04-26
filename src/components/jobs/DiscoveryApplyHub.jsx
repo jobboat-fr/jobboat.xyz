@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/apiClient';
 import { DIMENSION_LABELS, DIMENSION_GROUPS } from '../../services/ewma';
 import LoadingWithTips from '../LoadingWithTips';
 import ScoreAlgorithmPanel from '../ScoreAlgorithmPanel';
+import SwipeJobCard from './SwipeJobCard';
 import PortalAssistPanel from './PortalAssistPanel';
 import DocumentVault from '../DocumentVault';
 import './discoveryApplyHub.css';
@@ -25,7 +26,7 @@ export default function DiscoveryApplyHub() {
   const navigate = useNavigate();
   const fileRef = useRef(null);
 
-  // Flow steps: 'loading' -> 'cv' -> 'analysis' -> 'jobs' -> 'apply'
+  // Flow steps: 'loading' -> 'cv' -> 'analysis' -> 'swipe' -> 'summary' -> 'apply'
   const [step, setStep] = useState('loading');
 
   // CV state
@@ -38,8 +39,11 @@ export default function DiscoveryApplyHub() {
   const [loadingJobs, setLoadingJobs] = useState(false);
   const [jobsMeta, setJobsMeta] = useState(null);
 
+  // Swipe state (replaces list selection)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [accepted, setAccepted] = useState([]);
+
   // Apply state
-  const [selectedIds, setSelectedIds] = useState(new Set());
   const [applyMessage, setApplyMessage] = useState('');
   const [generatingMsg, setGeneratingMsg] = useState(false);
   const [applying, setApplying] = useState(false);
@@ -57,6 +61,10 @@ export default function DiscoveryApplyHub() {
   const [aggStatus, setAggStatus] = useState(null);
   const [status, setStatus] = useState('');
   const [showAlgoPanel, setShowAlgoPanel] = useState(false);
+
+  // Portal prompt: "now or later?" for portal-only jobs
+  const [portalPromptJob, setPortalPromptJob] = useState(null);
+  const [deferredPortals, setDeferredPortals] = useState([]);
 
   // On mount: check for existing CV, skip upload if found
   useEffect(() => {
@@ -84,10 +92,7 @@ export default function DiscoveryApplyHub() {
     return () => { cancelled = true; };
   }, [user?.email]);
 
-  const selectedJobs = useMemo(
-    () => jobs.filter(j => selectedIds.has(j.id)),
-    [jobs, selectedIds]
-  );
+  // accepted[] replaces selectedIds — populated by swipe
 
   const dims = cvData?.parsed?.dimensions || cvData?.insights?.dimensions || cvData?.dimensions || {};
   const skills = cvData?.parsed?.skills || cvData?.insights?.skills || cvData?.parsed?.keywords || cvData?.skills || cvData?.insights?.keywords || cvData?.keywords || [];
@@ -116,7 +121,6 @@ export default function DiscoveryApplyHub() {
   async function runDiscovery() {
     setLoadingJobs(true);
     setStatus('');
-    setSelectedIds(new Set());
     setApplyResult(null);
     try {
       // Use smart auto-discovery (CV + profile based)
@@ -139,7 +143,10 @@ export default function DiscoveryApplyHub() {
         // Also store for coaching context
         try { localStorage.setItem('jobboat_matching_context', JSON.stringify(res.user_score_summary)); } catch {}
       }
-      setStep('jobs');
+      setCurrentIndex(0);
+      setAccepted([]);
+      setDeferredPortals([]);
+      setStep('swipe');
       setStatus(`${nextJobs.length} offres trouvees correspondant a ton profil.`);
     } catch (e) {
       setStatus(`Erreur de recherche: ${e.message}`);
@@ -148,24 +155,58 @@ export default function DiscoveryApplyHub() {
     }
   }
 
-  function toggleSelection(jobId) {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(jobId)) next.delete(jobId); else next.add(jobId);
+  // ── Swipe handlers ──
+  const handleAccept = useCallback((job) => {
+    const isPortalOnly = !job.apply_email && job.apply_url;
+    if (isPortalOnly) {
+      setPortalPromptJob(job);
+      return;
+    }
+    setAccepted(prev => [...prev, job]);
+    setCurrentIndex(prev => {
+      const next = prev + 1;
+      if (next >= jobs.length) setTimeout(() => setStep('summary'), 350);
       return next;
     });
-  }
+  }, [jobs.length]);
 
-  function toggleSelectAll() {
-    if (selectedIds.size === jobs.length) setSelectedIds(new Set());
-    else setSelectedIds(new Set(jobs.map(j => j.id)));
-  }
+  const handleReject = useCallback(() => {
+    setCurrentIndex(prev => {
+      const next = prev + 1;
+      if (next >= jobs.length) setTimeout(() => setStep('summary'), 350);
+      return next;
+    });
+  }, [jobs.length]);
+
+  const handlePortalNow = useCallback((job) => {
+    setPortalPromptJob(null);
+    // Open the portal in a new tab — the Chrome extension autofill will handle it
+    window.open(job.apply_url, '_blank');
+    // Still count as accepted so it shows in results
+    setAccepted(prev => [...prev, job]);
+    setCurrentIndex(prev => {
+      const next = prev + 1;
+      if (next >= jobs.length) setTimeout(() => setStep('summary'), 350);
+      return next;
+    });
+  }, [jobs.length]);
+
+  const handlePortalLater = useCallback((job) => {
+    setPortalPromptJob(null);
+    setDeferredPortals(prev => [...prev, job]);
+    setAccepted(prev => [...prev, job]);
+    setCurrentIndex(prev => {
+      const next = prev + 1;
+      if (next >= jobs.length) setTimeout(() => setStep('summary'), 350);
+      return next;
+    });
+  }, [jobs.length]);
 
   async function generateAiMessage() {
-    if (!selectedJobs.length) return;
+    if (!accepted.length) return;
     setGeneratingMsg(true);
     try {
-      const focus = selectedJobs[0];
+      const focus = accepted[0];
       const response = await api.v2AiExecute({
         task: 'application_email',
         messages: [
@@ -181,13 +222,13 @@ export default function DiscoveryApplyHub() {
     }
   }
 
-  async function applyToSelection() {
-    if (!selectedJobs.length) return;
+  async function applyToAccepted() {
+    if (!accepted.length) return;
     setApplying(true);
     setApplyResult(null);
     setStatus('');
     try {
-      const jobPayload = selectedJobs.map(j => ({
+      const jobPayload = accepted.map(j => ({
         id: j.id, title: j.title, company: j.company,
         apply_email: j.apply_email || null, apply_url: j.apply_url || null,
         company_domain: j.company_domain || null,
@@ -231,7 +272,7 @@ export default function DiscoveryApplyHub() {
           clipboard_text: prepared?.clipboard_text || null,
           platformInfo: prepared?.platformInfo || null,
           company_intel: prepared?.company_intel || null,
-          title: prepared?.title || p.title || selectedJobs.find(j => j.id === p.jobId)?.title || '',
+          title: prepared?.title || p.title || accepted.find(j => j.id === p.jobId)?.title || '',
         };
       });
 
@@ -254,6 +295,18 @@ export default function DiscoveryApplyHub() {
               instructions: pj.platformInfo?.instructions || [],
             });
           }
+        }
+      }
+
+      // Add deferred portal jobs to portal results
+      for (const dj of deferredPortals) {
+        if (!portalJobs.find(p => p.jobId === dj.id)) {
+          portalJobs.push({
+            jobId: dj.id, title: dj.title || '', company: dj.company || '',
+            status: 'portal_pending', channel: 'portal_assist', platform: dj.platform || '',
+            apply_url: dj.apply_url, letter: null, clipboard_text: null,
+            platformInfo: null, instructions: [],
+          });
         }
       }
 
@@ -297,8 +350,8 @@ export default function DiscoveryApplyHub() {
         <div className="hub__steps">
           <span className={`hub__step ${step === 'cv' ? 'hub__step--active' : cvData ? 'hub__step--done' : ''}`}>1. CV</span>
           <span className={`hub__step ${step === 'analysis' ? 'hub__step--active' : jobs.length > 0 ? 'hub__step--done' : ''}`}>2. Analyse</span>
-          <span className={`hub__step ${step === 'jobs' ? 'hub__step--active' : applyResult ? 'hub__step--done' : ''}`}>3. Offres</span>
-          <span className={`hub__step ${step === 'apply' ? 'hub__step--active' : ''}`}>4. Candidater</span>
+          <span className={`hub__step ${step === 'swipe' ? 'hub__step--active' : accepted.length > 0 ? 'hub__step--done' : ''}`}>3. Swipe</span>
+          <span className={`hub__step ${step === 'summary' ? 'hub__step--active' : applyResult ? 'hub__step--done' : ''}`}>4. Candidater</span>
         </div>
       </header>
 
@@ -463,8 +516,8 @@ export default function DiscoveryApplyHub() {
         </section>
       )}
 
-      {/* ───── STEP 3: Job Results ───── */}
-      {step === 'jobs' && recommendation?.recommendation === 'coaching' && (
+      {/* ───── COACHING RECOMMENDATION ───── */}
+      {step === 'swipe' && recommendation?.recommendation === 'coaching' && (
         <section className="hub__section fade-in-up">
           <div className="glass-card hub__coaching-rec" style={{ borderLeft: '4px solid #f59e0b', marginBottom: 16 }}>
             <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
@@ -474,8 +527,7 @@ export default function DiscoveryApplyHub() {
               <div>
                 <h4 className="font-display" style={{ fontWeight: 600, marginBottom: 4 }}>Recommandation JobBoat</h4>
                 <p style={{ fontSize: 'var(--jb-text-sm)', color: 'var(--jb-text-secondary)', lineHeight: 1.5, marginBottom: 12 }}>
-                  Votre profil correspond a moins de 25% des offres disponibles (score moyen : {recommendation.avg_match}%).
-                  Une session de coaching IA ciblee peut ameliorer vos dimensions les plus faibles et augmenter significativement vos chances.
+                  Score moyen : {recommendation.avg_match}%. Une session de coaching IA peut ameliorer vos dimensions faibles.
                 </p>
                 {recommendation.weak_dimensions?.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
@@ -491,7 +543,7 @@ export default function DiscoveryApplyHub() {
                     Commencer le coaching
                   </button>
                   <button className="btn btn--ghost btn--sm" onClick={() => setRecommendation(null)}>
-                    Postuler quand meme
+                    Continuer
                   </button>
                 </div>
               </div>
@@ -500,186 +552,48 @@ export default function DiscoveryApplyHub() {
         </section>
       )}
 
-      {step === 'jobs' && (
-        <section className="hub__section fade-in-up">
-          <div className="glass-card hub__panel">
-            <div className="hub__jobs-header">
-              <div>
-                <span className="font-display" style={{ fontWeight: 600 }}>
-                  {jobsMeta?.total || jobs.length} offres
-                </span>
-                <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', marginLeft: 8 }}>
-                  Source: {jobsMeta?.source || 'auto'}
-                  {jobsMeta?.aggregated > 0 && ` (${jobsMeta.aggregated} agregees)`}
-                </span>
-              </div>
-              <div className="hub__inline">
-                <button className="btn btn--ghost btn--sm" onClick={toggleSelectAll} disabled={!jobs.length}>
-                  {selectedIds.size === jobs.length && jobs.length > 0 ? 'Tout deselectionner' : 'Tout selectionner'}
-                </button>
-                <button className="btn btn--secondary btn--sm" onClick={generateAiMessage} disabled={!selectedJobs.length || generatingMsg}>
-                  {generatingMsg ? 'Generation...' : 'Message IA'}
-                </button>
-                <button className="btn btn--primary btn--sm" onClick={applyToSelection} disabled={!selectedJobs.length || applying}>
-                  {applying ? 'Envoi...' : `Candidater (${selectedJobs.length})`}
-                </button>
-              </div>
+      {/* ───── STEP 3: Swipe Job Selection ───── */}
+      {step === 'swipe' && (
+        <section className="hub__section hub__section--centered fade-in-up">
+          {jobsMeta && (
+            <div style={{ textAlign: 'center', marginBottom: 'var(--jb-space-3)' }}>
+              <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)' }}>
+                {jobsMeta.total} offres — Source: {jobsMeta.source}
+                {jobsMeta.aggregated > 0 && ` (${jobsMeta.aggregated} agregees)`}
+              </span>
             </div>
+          )}
 
-            {jobs.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 'var(--jb-space-8) 0' }}>
-                <p className="text-muted">Aucune offre trouvee. Essaie avec un autre profil ou relance la recherche.</p>
-                <button className="btn btn--secondary btn--sm" onClick={() => setStep('cv')} style={{ marginTop: 'var(--jb-space-3)' }}>
-                  Retour au CV
-                </button>
-              </div>
-            ) : (
-              <div className="hub__jobs">
-                {jobs.map(job => (
-                  <button
-                    key={job.id}
-                    className={`hub__job glass-card ${selectedIds.has(job.id) ? 'glass-card--accent' : ''}`}
-                    onClick={() => toggleSelection(job.id)}
-                  >
-                    <div className="hub__job-top">
-                      <span className="font-display" style={{ fontWeight: 600, fontSize: 'var(--jb-text-sm)' }}>{job.title}</span>
-                      {typeof job.match_score === 'number' && (
-                        <span className="badge badge--accent">{job.match_score}%</span>
-                      )}
-                    </div>
-                    <span className="text-secondary" style={{ fontSize: 'var(--jb-text-xs)' }}>
-                      {job.company} -- {job.location}
-                    </span>
-                    <div className="hub__badges">
-                      {job.contract && job.contract !== 'n/a' && <span className="badge">{job.contract}</span>}
-                      {(job.tags || []).slice(0, 3).map((tag, ti) => {
-                        const label = typeof tag === 'string' ? tag : (tag?.skill_name || tag?.name || JSON.stringify(tag));
-                        return <span key={`${job.id}-tag-${ti}`} className="badge">{label}</span>;
-                      })}
-                      {job.contact_enriched && <span className="badge badge--success">Contact</span>}
-                      {!job.contact_enriched && !job.apply_email && job.apply_url && (
-                        <span className="badge" style={{ background: 'rgba(45,106,160,0.1)', color: 'var(--jb-accent)', fontSize: '0.6rem' }}>Portail</span>
-                      )}
-                      {job.apply_email && <span className="badge badge--success" style={{ fontSize: '0.6rem' }}>Email</span>}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+          {jobs.length === 0 ? (
+            <div className="glass-card hub__panel" style={{ textAlign: 'center', padding: 'var(--jb-space-8)' }}>
+              <p className="text-muted">Aucune offre trouvee. Essaie avec un autre profil ou relance la recherche.</p>
+              <button className="btn btn--secondary btn--sm" onClick={() => setStep('cv')} style={{ marginTop: 'var(--jb-space-3)' }}>
+                Retour au CV
+              </button>
+            </div>
+          ) : currentIndex < jobs.length ? (
+            <SwipeJobCard
+              key={jobs[currentIndex].id}
+              job={jobs[currentIndex]}
+              index={currentIndex}
+              total={jobs.length}
+              onAccept={handleAccept}
+              onReject={handleReject}
+            />
+          ) : (
+            <div className="glass-card" style={{ padding: 'var(--jb-space-6)', textAlign: 'center' }}>
+              <p className="text-muted">Chargement du resume...</p>
+            </div>
+          )}
 
-            {/* Application message + enhanced apply */}
-            {selectedJobs.length > 0 && (
-              <div style={{ marginTop: 'var(--jb-space-4)' }}>
-                <label className="label">Message de candidature</label>
-                <textarea
-                  className="input"
-                  rows={4}
-                  value={applyMessage}
-                  onChange={e => setApplyMessage(e.target.value)}
-                  placeholder="Le message IA apparaitra ici. Tu peux le modifier avant d'envoyer."
-                />
+          {accepted.length > 0 && (
+            <div className="hub__accepted-pill">
+              <span className="text-accent font-display" style={{ fontWeight: 700 }}>{accepted.length}</span>
+              <span className="text-muted"> offre{accepted.length > 1 ? 's' : ''} acceptee{accepted.length > 1 ? 's' : ''}</span>
+            </div>
+          )}
 
-                {/* Document Picker */}
-                <div className="hub__doc-picker" style={{ marginTop: 'var(--jb-space-4)' }}>
-                  <button
-                    type="button"
-                    className="hub__doc-toggle"
-                    onClick={() => setShowDocPicker(p => !p)}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    <span>Joindre des documents</span>
-                    {selectedDocIds.length > 0 && (
-                      <span className="badge badge--accent" style={{ marginLeft: 6 }}>{selectedDocIds.length}</span>
-                    )}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto', transform: showDocPicker ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </button>
-                  {showDocPicker && (
-                    <div className="hub__doc-vault fade-in-up" style={{ marginTop: 'var(--jb-space-2)' }}>
-                      <DocumentVault
-                        selectable
-                        compact
-                        selectedIds={selectedDocIds}
-                        onSelect={setSelectedDocIds}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Custom Fields */}
-                <div className="hub__custom-fields" style={{ marginTop: 'var(--jb-space-4)' }}>
-                  <button
-                    type="button"
-                    className="hub__doc-toggle"
-                    onClick={(e) => {
-                      const el = e.currentTarget.nextElementSibling;
-                      if (el) el.style.display = el.style.display === 'none' ? 'grid' : 'none';
-                      e.currentTarget.querySelector('.hub__chevron').style.transform =
-                        el?.style.display === 'none' ? 'none' : 'rotate(180deg)';
-                    }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                    </svg>
-                    <span>Informations complementaires</span>
-                    <svg className="hub__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto', transition: 'transform 0.2s' }}>
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </button>
-                  <div className="hub__fields-grid" style={{ display: 'none', gap: 'var(--jb-space-3)', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', marginTop: 'var(--jb-space-2)' }}>
-                    <div>
-                      <label className="label" style={{ fontSize: 'var(--jb-text-xs)' }}>Telephone</label>
-                      <input
-                        className="input"
-                        type="tel"
-                        placeholder="+33 6 12 34 56 78"
-                        value={customFields.phone}
-                        onChange={e => setCustomFields(p => ({ ...p, phone: e.target.value }))}
-                      />
-                    </div>
-                    <div>
-                      <label className="label" style={{ fontSize: 'var(--jb-text-xs)' }}>Disponibilite</label>
-                      <input
-                        className="input"
-                        type="text"
-                        placeholder="Immediatement, 1 mois..."
-                        value={customFields.availability}
-                        onChange={e => setCustomFields(p => ({ ...p, availability: e.target.value }))}
-                      />
-                    </div>
-                    <div>
-                      <label className="label" style={{ fontSize: 'var(--jb-text-xs)' }}>Pretentions salariales</label>
-                      <input
-                        className="input"
-                        type="text"
-                        placeholder="45-55K EUR"
-                        value={customFields.salary}
-                        onChange={e => setCustomFields(p => ({ ...p, salary: e.target.value }))}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Main Apply CTA */}
-                <div className="hub__apply-cta">
-                  <button className="btn btn--secondary" onClick={generateAiMessage} disabled={generatingMsg}>
-                    {generatingMsg ? 'Generation en cours...' : 'Generer un message IA'}
-                  </button>
-                  <button className="btn btn--primary btn-magnetic hub__apply-btn" onClick={applyToSelection} disabled={applying}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}>
-                      <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-                    </svg>
-                    {applying ? 'Envoi en cours...' : `Envoyer ${selectedJobs.length} candidature${selectedJobs.length > 1 ? 's' : ''}`}
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', gap: 'var(--jb-space-3)', marginTop: 'var(--jb-space-2)' }}>
+          <div style={{ display: 'flex', gap: 'var(--jb-space-3)', marginTop: 'var(--jb-space-2)', justifyContent: 'center' }}>
             <button className="btn btn--ghost btn--sm" onClick={() => setStep('analysis')}>
               Retour a l'analyse
             </button>
@@ -690,7 +604,137 @@ export default function DiscoveryApplyHub() {
         </section>
       )}
 
-      {/* ───── STEP 4: Apply Results (Multi-Channel) ───── */}
+      {/* ───── PORTAL PROMPT MODAL ───── */}
+      {portalPromptJob && (
+        <div className="hub__portal-overlay">
+          <div className="glass-card hub__portal-prompt">
+            <h3 className="font-display" style={{ fontWeight: 700, marginBottom: 'var(--jb-space-3)' }}>
+              Candidature via portail
+            </h3>
+            <p className="text-secondary" style={{ fontSize: 'var(--jb-text-sm)', lineHeight: 1.6, marginBottom: 'var(--jb-space-2)' }}>
+              <strong>{portalPromptJob.title}</strong> chez <strong>{portalPromptJob.company}</strong> n'a pas d'email direct.
+              Le formulaire doit etre rempli sur le portail.
+            </p>
+            <p className="text-muted" style={{ fontSize: 'var(--jb-text-xs)', marginBottom: 'var(--jb-space-4)' }}>
+              L'extension Chrome JobBoat remplira automatiquement le formulaire avec votre profil IA.
+            </p>
+            <div style={{ display: 'flex', gap: 'var(--jb-space-3)', flexDirection: 'column' }}>
+              <button className="btn btn--primary btn-magnetic" onClick={() => handlePortalNow(portalPromptJob)}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}>
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+                Ouvrir le portail maintenant (autofill IA)
+              </button>
+              <button className="btn btn--secondary" onClick={() => handlePortalLater(portalPromptJob)}>
+                Garder pour la fin de session
+              </button>
+              <button className="btn btn--ghost btn--sm" onClick={() => { setPortalPromptJob(null); handleReject(portalPromptJob); }}>
+                Passer cette offre
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ───── STEP 4: Summary + Apply ───── */}
+      {step === 'summary' && (
+        <section className="hub__section fade-in-up">
+          <div className="glass-card hub__panel">
+            <h3 className="font-display" style={{ fontWeight: 700, marginBottom: 'var(--jb-space-3)' }}>
+              {accepted.length > 0 ? `${accepted.length} offre${accepted.length > 1 ? 's' : ''} selectionnee${accepted.length > 1 ? 's' : ''}` : 'Aucune offre selectionnee'}
+            </h3>
+
+            {accepted.length > 0 && (
+              <>
+                <div className="hub__accepted-list">
+                  {accepted.map(job => (
+                    <div key={job.id} className="hub__accepted-item glass-card">
+                      <div className="hub__job-top">
+                        <span className="font-display" style={{ fontWeight: 600, fontSize: 'var(--jb-text-sm)' }}>{job.title}</span>
+                        {typeof job.match_score === 'number' && <span className="badge badge--accent">{job.match_score}%</span>}
+                      </div>
+                      <span className="text-muted" style={{ fontSize: 'var(--jb-text-xs)' }}>{job.company}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <label className="label" style={{ marginTop: 'var(--jb-space-4)' }}>Message de candidature</label>
+                <textarea
+                  className="input"
+                  rows={4}
+                  value={applyMessage}
+                  onChange={e => setApplyMessage(e.target.value)}
+                  placeholder="Le message IA apparaitra ici. Tu peux le modifier avant d'envoyer."
+                />
+
+                {/* Document Picker */}
+                <div className="hub__doc-picker" style={{ marginTop: 'var(--jb-space-4)' }}>
+                  <button type="button" className="hub__doc-toggle" onClick={() => setShowDocPicker(p => !p)}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <span>Joindre des documents</span>
+                    {selectedDocIds.length > 0 && <span className="badge badge--accent" style={{ marginLeft: 6 }}>{selectedDocIds.length}</span>}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto', transform: showDocPicker ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                  {showDocPicker && (
+                    <div className="hub__doc-vault fade-in-up" style={{ marginTop: 'var(--jb-space-2)' }}>
+                      <DocumentVault selectable compact selectedIds={selectedDocIds} onSelect={setSelectedDocIds} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Custom Fields */}
+                <div className="hub__custom-fields" style={{ marginTop: 'var(--jb-space-4)' }}>
+                  <div className="hub__fields-grid" style={{ display: 'grid', gap: 'var(--jb-space-3)', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
+                    <div>
+                      <label className="label" style={{ fontSize: 'var(--jb-text-xs)' }}>Telephone</label>
+                      <input className="input" type="tel" placeholder="+33 6 12 34 56 78"
+                        value={customFields.phone} onChange={e => setCustomFields(p => ({ ...p, phone: e.target.value }))} />
+                    </div>
+                    <div>
+                      <label className="label" style={{ fontSize: 'var(--jb-text-xs)' }}>Disponibilite</label>
+                      <input className="input" type="text" placeholder="Immediatement, 1 mois..."
+                        value={customFields.availability} onChange={e => setCustomFields(p => ({ ...p, availability: e.target.value }))} />
+                    </div>
+                    <div>
+                      <label className="label" style={{ fontSize: 'var(--jb-text-xs)' }}>Pretentions salariales</label>
+                      <input className="input" type="text" placeholder="45-55K EUR"
+                        value={customFields.salary} onChange={e => setCustomFields(p => ({ ...p, salary: e.target.value }))} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Apply actions */}
+                <div className="hub__apply-cta">
+                  <button className="btn btn--secondary" onClick={generateAiMessage} disabled={generatingMsg}>
+                    {generatingMsg ? 'Generation en cours...' : 'Generer un message IA'}
+                  </button>
+                  <button className="btn btn--primary btn-magnetic hub__apply-btn" onClick={applyToAccepted} disabled={applying}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}>
+                      <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                    {applying ? 'Envoi en cours...' : `Envoyer ${accepted.length} candidature${accepted.length > 1 ? 's' : ''}`}
+                  </button>
+                </div>
+              </>
+            )}
+
+            <div style={{ display: 'flex', gap: 'var(--jb-space-3)', marginTop: 'var(--jb-space-3)' }}>
+              <button className="btn btn--ghost btn--sm" onClick={() => { setStep('swipe'); setCurrentIndex(0); setAccepted([]); }}>
+                Re-swiper
+              </button>
+              <button className="btn btn--ghost btn--sm" onClick={() => { setStep('cv'); setCvData(null); setCvFile(null); setJobs([]); setAccepted([]); }}>
+                Nouveau CV
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ───── STEP 5: Apply Results (Multi-Channel) ───── */}
       {step === 'apply' && applyResult && (
         <section className="hub__section fade-in-up">
           <div className="glass-card hub__panel">
@@ -703,10 +747,7 @@ export default function DiscoveryApplyHub() {
             />
 
             <div className="hub__actions" style={{ marginTop: 'var(--jb-space-4)' }}>
-              <button className="btn btn--secondary" onClick={() => setStep('jobs')}>
-                Retour aux offres
-              </button>
-              <button className="btn btn--primary" onClick={() => { setStep('cv'); setCvData(null); setCvFile(null); setJobs([]); setApplyResult(null); }}>
+              <button className="btn btn--secondary" onClick={() => { setStep('cv'); setCvData(null); setCvFile(null); setJobs([]); setApplyResult(null); setAccepted([]); }}>
                 Nouvelle recherche
               </button>
             </div>
