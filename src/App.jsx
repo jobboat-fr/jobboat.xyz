@@ -165,6 +165,10 @@ function AppRoutes() {
 
       <Route path="/legal" element={<Legal />} />
 
+      <Route path="/privacy" element={<Legal initialSection="privacy" />} />
+
+      <Route path="/privacy-policy" element={<Legal initialSection="privacy" />} />
+
       <Route path="/delete-account" element={<DeleteAccount />} />
 
       <Route path="/stats" element={<PublicStats />} />
@@ -265,4 +269,3 @@ export default function App() {
   );
 
 }
-

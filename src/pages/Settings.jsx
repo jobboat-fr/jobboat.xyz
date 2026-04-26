@@ -1049,7 +1049,7 @@ export default function Settings() {
                 <a href="https://www.azzcolabs.business" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
                   AZZ&CO LABS — Notre entreprise
                 </a>
-                <a href="https://jobboat.xyz/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
+                <a href="/privacy" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>
                   Politique de confidentialite
                 </a>
                 <a href="https://www.azzcolabs.business/terms.html" target="_blank" rel="noopener noreferrer" className="btn btn--ghost" style={{ textAlign: 'left', justifyContent: 'flex-start' }}>

@@ -32,8 +32,8 @@ const h2 = { color: '#f1f5f9', fontSize: 20, marginBottom: 8, scrollMarginTop: 1
 const h3 = { color: '#e2e8f0', fontSize: 15, marginTop: 24, marginBottom: 6 };
 const sub = { color: '#94a3b8', fontSize: 12, marginTop: -4, marginBottom: 16 };
 
-export default function Legal() {
-  const [active, setActive] = useState('mentions');
+export default function Legal({ initialSection = 'mentions' }) {
+  const [active, setActive] = useState(initialSection);
   const [showContact, setShowContact] = useState(false);
   const navigate = useNavigate();
   const tabRefs = useRef({});
@@ -42,9 +42,9 @@ export default function Legal() {
   useEffect(() => {
     const hash = (window.location.hash || '').replace('#', '');
     const param = new URLSearchParams(window.location.search).get('section');
-    const target = (hash || param || '').toLowerCase();
+    const target = (hash || param || initialSection || '').toLowerCase();
     if (target && SECTIONS.some((s) => s.id === target)) setActive(target);
-  }, []);
+  }, [initialSection]);
 
   function focusTab(id) {
     const el = tabRefs.current[id];
