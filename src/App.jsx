@@ -1,163 +1,196 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from "react";
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
-import { GravityProvider } from './context/GravityContext';
+import { GravityProvider } from "./context/GravityContext";
 
-import { ActivityProvider } from './context/ActivityContext';
+import { ActivityProvider } from "./context/ActivityContext";
 
-import AdminProtectedRoute, { checkAdminAccess } from './components/AdminProtectedRoute';
+import AdminProtectedRoute, {
+  checkAdminAccess,
+} from "./components/AdminProtectedRoute";
 
-import SEOHead from './components/SEOHead';
+import SEOHead from "./components/SEOHead";
 
 // ActivityFeed panel intentionally disabled — see App body for note.
 // import ActivityFeed from './components/ActivityFeed';
 
-import UpgradeModal from './components/UpgradeModal';
+import UpgradeModal from "./components/UpgradeModal";
 
+const Layout = lazy(() => import("./layout/Layout"));
 
+const Landing = lazy(() => import("./pages/Landing"));
 
-const Layout       = lazy(() => import('./layout/Layout'));
+const Auth = lazy(() => import("./pages/Auth"));
 
-const Landing      = lazy(() => import('./pages/Landing'));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 
-const Auth         = lazy(() => import('./pages/Auth'));
+const CoachingRoom = lazy(() => import("./pages/CoachingRoom"));
 
-const Dashboard    = lazy(() => import('./pages/Dashboard'));
+const AutoApply = lazy(() => import("./pages/AutoApply"));
 
-const CoachingRoom = lazy(() => import('./pages/CoachingRoom'));
+const ProfileKPI = lazy(() => import("./pages/ProfileKPI"));
 
-const AutoApply    = lazy(() => import('./pages/AutoApply'));
+const Settings = lazy(() => import("./pages/Settings"));
 
-const ProfileKPI   = lazy(() => import('./pages/ProfileKPI'));
+const CvBuilder = lazy(() => import("./pages/CvBuilder"));
 
-const Settings     = lazy(() => import('./pages/Settings'));
+const Pricing = lazy(() => import("./pages/Pricing"));
 
-const CvBuilder    = lazy(() => import('./pages/CvBuilder'));
+const Marketing = lazy(() => import("./pages/Marketing"));
 
-const Pricing      = lazy(() => import('./pages/Pricing'));
+const MesCandidatures = lazy(() => import("./pages/MesCandidatures"));
 
-const Marketing         = lazy(() => import('./pages/Marketing'));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
-const MesCandidatures  = lazy(() => import('./pages/MesCandidatures'));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 
-const NotFound     = lazy(() => import('./pages/NotFound'));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 
-const AuthCallback = lazy(() => import('./pages/AuthCallback'));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 
-const AdminLogin      = lazy(() => import('./pages/AdminLogin'));
+const AdminAPIKeys = lazy(() => import("./pages/AdminAPIKeys"));
 
-const AdminDashboard  = lazy(() => import('./pages/AdminDashboard'));
+const AdminLogs = lazy(() => import("./pages/AdminLogs"));
 
-const AdminAPIKeys    = lazy(() => import('./pages/AdminAPIKeys'));
+const AdminRevenue = lazy(() => import("./pages/AdminRevenue"));
 
-const AdminLogs       = lazy(() => import('./pages/AdminLogs'));
+const AdminCosts = lazy(() => import("./pages/AdminCosts"));
 
-const AdminRevenue    = lazy(() => import('./pages/AdminRevenue'));
+const AdminMetrics = lazy(() => import("./pages/AdminMetrics"));
 
-const AdminCosts      = lazy(() => import('./pages/AdminCosts'));
+const AdminRecruiter = lazy(() => import("./pages/AdminRecruiter"));
 
-const AdminMetrics    = lazy(() => import('./pages/AdminMetrics'));
+const MyReadiness = lazy(() => import("./pages/MyReadiness"));
 
-const AdminRecruiter  = lazy(() => import('./pages/AdminRecruiter'));
+const CvViewer = lazy(() => import("./pages/CvViewer"));
 
-const MyReadiness     = lazy(() => import('./pages/MyReadiness'));
+const Legal = lazy(() => import("./pages/Legal"));
 
-const CvViewer        = lazy(() => import('./pages/CvViewer'));
+const DeleteAccount = lazy(() => import("./pages/DeleteAccount"));
 
-const Legal           = lazy(() => import('./pages/Legal'));
-
-const DeleteAccount   = lazy(() => import('./pages/DeleteAccount'));
-
-const PublicStats     = lazy(() => import('./pages/PublicStats'));
-
-
+const PublicStats = lazy(() => import("./pages/PublicStats"));
 
 function PageLoader() {
-
   return (
-
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-
-      <div style={{ width: 36, height: 36, border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
+    >
+      <div
+        style={{
+          width: 36,
+          height: 36,
+          border: "3px solid rgba(255,255,255,0.1)",
+          borderTopColor: "#6366f1",
+          borderRadius: "50%",
+          animation: "spin 0.8s linear infinite",
+        }}
+      />
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
     </div>
-
   );
-
 }
 
-
-
 function ProtectedRoute({ children }) {
-
   const { user, loading } = useAuth();
 
-  if (loading) return (
+  if (loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            border: "3px solid #e5e7eb",
+            borderTopColor: "#6366f1",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
 
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-
-      <div style={{ width: 40, height: 40, border: '3px solid #e5e7eb', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
-    </div>
-
-  );
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
 
   if (!user && !checkAdminAccess()) return <Navigate to="/auth" replace />;
 
   return children;
-
 }
 
-
-
 function GuestRoute({ children, fallback }) {
-
   const { user, loading } = useAuth();
 
-  if (loading) return (
+  if (loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            border: "3px solid #e5e7eb",
+            borderTopColor: "#6366f1",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
 
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-
-      <div style={{ width: 40, height: 40, border: '3px solid #e5e7eb', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
-    </div>
-
-  );
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
 
   if (user) return <Navigate to={fallback || "/dashboard"} replace />;
 
   return children;
-
 }
 
-
-
 function AppRoutes() {
-
   const { user } = useAuth();
 
-
-
   return (
-
     <Routes>
-
       {/* Root: Landing or Dashboard */}
 
-      <Route path="/" element={<GuestRoute><Landing /></GuestRoute>} />
+      <Route
+        path="/"
+        element={
+          <GuestRoute>
+            <Landing />
+          </GuestRoute>
+        }
+      />
 
       <Route path="/landing" element={<Landing />} />
 
-      <Route path="/auth" element={<GuestRoute><Auth /></GuestRoute>} />
+      <Route
+        path="/auth"
+        element={
+          <GuestRoute>
+            <Auth />
+          </GuestRoute>
+        }
+      />
 
       <Route path="/auth/callback" element={<AuthCallback />} />
 
@@ -167,38 +200,91 @@ function AppRoutes() {
 
       <Route path="/privacy" element={<Legal initialSection="privacy" />} />
 
-      <Route path="/privacy-policy" element={<Legal initialSection="privacy" />} />
+      <Route
+        path="/privacy-policy"
+        element={<Legal initialSection="privacy" />}
+      />
 
       <Route path="/delete-account" element={<DeleteAccount />} />
 
       <Route path="/stats" element={<PublicStats />} />
 
-
-
       {/* Admin routes */}
 
       <Route path="/admin/login" element={<AdminLogin />} />
 
-      <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+      <Route
+        path="/admin"
+        element={
+          <AdminProtectedRoute>
+            <AdminDashboard />
+          </AdminProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/api-keys" element={<AdminProtectedRoute><AdminAPIKeys /></AdminProtectedRoute>} />
+      <Route
+        path="/admin/api-keys"
+        element={
+          <AdminProtectedRoute>
+            <AdminAPIKeys />
+          </AdminProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/logs" element={<AdminProtectedRoute><AdminLogs /></AdminProtectedRoute>} />
+      <Route
+        path="/admin/logs"
+        element={
+          <AdminProtectedRoute>
+            <AdminLogs />
+          </AdminProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/revenue" element={<AdminProtectedRoute><AdminRevenue /></AdminProtectedRoute>} />
+      <Route
+        path="/admin/revenue"
+        element={
+          <AdminProtectedRoute>
+            <AdminRevenue />
+          </AdminProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/costs" element={<AdminProtectedRoute><AdminCosts /></AdminProtectedRoute>} />
+      <Route
+        path="/admin/costs"
+        element={
+          <AdminProtectedRoute>
+            <AdminCosts />
+          </AdminProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/metrics" element={<AdminProtectedRoute><AdminMetrics /></AdminProtectedRoute>} />
+      <Route
+        path="/admin/metrics"
+        element={
+          <AdminProtectedRoute>
+            <AdminMetrics />
+          </AdminProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/recruiter" element={<AdminProtectedRoute><AdminRecruiter /></AdminProtectedRoute>} />
-
-
+      <Route
+        path="/admin/recruiter"
+        element={
+          <AdminProtectedRoute>
+            <AdminRecruiter />
+          </AdminProtectedRoute>
+        }
+      />
 
       {/* Protected app routes */}
 
-      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/coaching" element={<CoachingRoom />} />
@@ -218,54 +304,32 @@ function AppRoutes() {
         <Route path="/settings" element={<Settings />} />
 
         <Route path="/marketing" element={<Marketing />} />
-
       </Route>
 
-
-
       <Route path="*" element={<NotFound />} />
-
     </Routes>
-
   );
-
 }
 
-
-
 export default function App() {
-
   return (
-
     <ActivityProvider>
-
       <AuthProvider>
-
         <GravityProvider>
-
           <BrowserRouter>
-
             <SEOHead />
 
             <Suspense fallback={<PageLoader />}>
-
               <AppRoutes />
-
             </Suspense>
 
             {/* ActivityFeed panel disabled per product decision (Apr 2026). */}
             {/* To re-enable, restore: <ActivityFeed /> */}
 
             <UpgradeModal />
-
           </BrowserRouter>
-
         </GravityProvider>
-
       </AuthProvider>
-
     </ActivityProvider>
-
   );
-
 }

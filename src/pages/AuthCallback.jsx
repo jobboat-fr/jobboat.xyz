@@ -30,6 +30,7 @@ export default function AuthCallback() {
     if (error) {
       console.error('[AuthCallback] error:', error);
       setStatus(`Erreur: ${error}`);
+      alert()
       setTimeout(() => navigate('/auth', { replace: true }), 3000);
       return;
     }
@@ -49,6 +50,7 @@ export default function AuthCallback() {
             if (sessionError) {
               console.error('[AuthCallback] setSession error:', sessionError.message);
               setStatus(`Erreur de session: ${sessionError.message}. Redirection...`);
+              alert()
               setTimeout(() => navigate('/auth', { replace: true }), 3000);
               return;
             }
@@ -57,12 +59,14 @@ export default function AuthCallback() {
               navigate('/dashboard', { replace: true });
             } else {
               setStatus('Session introuvable. Redirection...');
+              alert()
               setTimeout(() => navigate('/auth', { replace: true }), 2000);
             }
           })
           .catch((err) => {
             console.error('[AuthCallback] setSession catch:', err);
             setStatus('Erreur inattendue. Redirection...');
+            alert()
             setTimeout(() => navigate('/auth', { replace: true }), 2000);
           });
       } else {
