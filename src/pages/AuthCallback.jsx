@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
-const RAILWAY_BACKEND = 'https://api.jobboat.xyz';
+const RAILWAY_BACKEND = 'https://jobboatv1-production-cb89.up.railway.app';
 
 export default function AuthCallback() {
   const [params] = useSearchParams();
@@ -96,7 +96,36 @@ export default function AuthCallback() {
       return;
     }
 
-    // ── LinkedIn callback with user data (backend redirected back) ──
+    // ── LinkedIn/provider callback with token_hash (Supabase magic-link session) ──
+    const tokenHash = params.get('token_hash');
+    const tokenType = params.get('type');
+    if (tokenHash) {
+      setStatus('Verification de la session...');
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: tokenType || 'magiclink' })
+        .then(({ data: otpData, error: otpError }) => {
+          if (otpError) {
+            console.error('[AuthCallback] verifyOtp error:', otpError.message);
+            setStatus(`Erreur de session: ${otpError.message}. Redirection...`);
+            setTimeout(() => navigate('/auth', { replace: true }), 3000);
+            return;
+          }
+          if (otpData?.session?.user) {
+            console.log('[AuthCallback] Session set via token_hash for', otpData.session.user.email);
+            navigate('/dashboard', { replace: true });
+          } else {
+            setStatus('Session introuvable. Redirection...');
+            setTimeout(() => navigate('/auth', { replace: true }), 2000);
+          }
+        })
+        .catch((err) => {
+          console.error('[AuthCallback] verifyOtp catch:', err);
+          setStatus('Erreur inattendue. Redirection...');
+          setTimeout(() => navigate('/auth', { replace: true }), 2000);
+        });
+      return;
+    }
+
+    // ── LinkedIn callback with user data (legacy fallback — no Supabase session) ──
     if (provider === 'linkedin' && email) {
       const userData = {
         uid: email,
